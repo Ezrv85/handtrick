@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="daylight">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNCLOG 2035 — </title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'system-ui', 'sans-serif'],
+            mono: ['"SF Mono"', 'ui-monospace', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          },
+          colors: {
+            iosBlue: '#007AFF',
+            iosCyan: '#32ADE6',
+            iosGreen: '#34C759',
+            iosOrange: '#FF9500',
+            iosRed: '#FF3B30',
+            iosPurple: '#AF52DE',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* =========================================================================
+       APPLE iOS 26 / iPadOS 26 "LIQUID GLASS" DESIGN TOKENS
+       ========================================================================= */
+    :root, [data-theme="daylight"] {
+      --ios-bg: #F2F2F7;
+      --ios-mesh-1: rgba(0, 122, 255, 0.14);
+      --ios-mesh-2: rgba(52, 199, 89, 0.11);
+      --ios-mesh-3: rgba(175, 82, 222, 0.10);
+
+      --glass-surface: rgba(255, 255, 255, 0.72);
+      --glass-surface-elevated: rgba(255, 255, 255, 0.86);
+      --glass-surface-solid: #FFFFFF;
+      --glass-grouped: rgba(118, 118, 128, 0.08);
+      --glass-grouped-strong: rgba(118, 118, 128, 0.14);
+
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-hairline: rgba(60, 60, 67, 0.14);
+      --glass-specular: rgba(255, 255, 255, 0.92);
+      --glass-shadow: rgba(15, 23, 42, 0.08);
+
+      --text-primary: #1C1C1E;
+      --text-secondary: #3A3A3C;
+      --text-tertiary: #636366;
+
+      --sys-blue: #007AFF;
+      --sys-cyan: #0A84FF;
+      --sys-green: #28CD41;
+      --sys-orange: #FF9500;
+      --sys-red: #FF3B30;
+      --sys-purple: #AF52DE;
+
+      /* Apple Maps Daylight Palette */
+      --map-canvas: #E9EEF5;
+      --map-land: #F8F6F0;
+      --map-park: #D8F3DC;
+      --map-road-casing: #E2D9C8;
+      --map-road-fill: #FFFFFF;
+      --map-highway: #FBBF24;
+      --map-water: #7CC4FA;
+      --map-water-stroke: #38BDF8;
+      --map-canal: #38BDF8;
+    }
+
+    [data-theme="midnight"] {
+      --ios-bg: #000000;
+      --ios-mesh-1: rgba(10, 132, 255, 0.18);
+      --ios-mesh-2: rgba(48, 209, 88, 0.12);
+      --ios-mesh-3: rgba(191, 90, 242, 0.15);
+
+      --glass-surface: rgba(28, 28, 30, 0.72);
+      --glass-surface-elevated: rgba(44, 44, 46, 0.84);
+      --glass-surface-solid: #1C1C1E;
+      --glass-grouped: rgba(255, 255, 255, 0.07);
+      --glass-grouped-strong: rgba(255, 255, 255, 0.13);
+
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-hairline: rgba(255, 255, 255, 0.12);
+      --glass-specular: rgba(255, 255, 255, 0.22);
+      --glass-shadow: rgba(0, 0, 0, 0.55);
+
+      --text-primary: #F5F5F7;
+      --text-secondary: #D1D1D6;
+      --text-tertiary: #8E8E93;
+
+      --sys-blue: #0A84FF;
+      --sys-cyan: #64D2FF;
+      --sys-green: #30D158;
+      --sys-orange: #FF9F0A;
+      --sys-red: #FF453A;
+      --sys-purple: #BF5AF2;
+
+      /* Apple Maps Midnight Palette */
+      --map-canvas: #0B101B;
+      --map-land: #161B26;
+      --map-park: #122620;
+      --map-road-casing: #1F2633;
+      --map-road-fill: #2B3342;
+      --map-highway: #D97706;
+      --map-water: #0D3B66;
+      --map-water-stroke: #0284C7;
+      --map-canal: #0EA5E9;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--ios-bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+      font-variant-numeric: tabular-nums;
+      transition: background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Atmospheric Mesh Behind Liquid Glass */
+    .ambient-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 10%, var(--ios-mesh-1) 0%, transparent 44%),
+        radial-gradient(circle at 86% 16%, var(--ios-mesh-3) 0%, transparent 42%),
+        radial-gradient(circle at 50% 88%, var(--ios-mesh-2) 0%, transparent 48%);
+    }
+
+    /* Liquid Glass Outer Squircle Card (28px) */
+    .liquid-glass {
+      background: var(--glass-surface);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        inset 0 1px 0 0 var(--glass-specular),
+        0 14px 36px -10px var(--glass-shadow);
+      border-radius: 28px;
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Liquid Glass Inner Squircle Module (20px) */
+    .liquid-module {
+      background: var(--glass-grouped);
+      border: 1px solid var(--glass-hairline);
+      box-shadow: inset 0 1px 0 0 var(--glass-specular);
+      border-radius: 20px;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .liquid-module-interactive:hover {
+      transform: translateY(-1.5px);
+      background: var(--glass-grouped-strong);
+    }
+
+    .liquid-module-interactive:active {
+      transform: scale(0.985);
+    }
+
+    .tabular-mono {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .text-ios-primary { color: var(--text-primary); }
+    .text-ios-secondary { color: var(--text-secondary); }
+    .text-ios-tertiary { color: var(--text-tertiary); }
+    .border-ios-hairline { border-color: var(--glass-hairline); }
+
+    /* =========================================================================
+       DYNAMIC ISLAND LIVE ACTIVITY MORPHING
+       ========================================================================= */
+    .dynamic-island {
+      background: #000000;
+      color: #F5F5F7;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        0 10px 28px -6px rgba(0, 0, 0, 0.42);
+      transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* =========================================================================
+       iOS SEGMENTED CONTROL
+       ========================================================================= */
+    .ios-segmented {
+      background: var(--glass-grouped-strong);
+      border: 1px solid var(--glass-hairline);
+      border-radius: 9999px;
+      padding: 3px;
+      display: inline-flex;
+      position: relative;
+    }
+
+    .ios-seg-btn {
+      border-radius: 9999px;
+      font-weight: 600;
+      transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ios-seg-btn.active {
+      background: var(--glass-surface-solid);
+      color: var(--text-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 var(--glass-specular);
+    }
+
+    /* =========================================================================
+       APPLE CONTROL CENTER THICK PILL SLIDERS (38px TALL)
+       ========================================================================= */
+    .cc-slider-pill {
+      position: relative;
+      height: 38px;
+      border-radius: 9999px;
+      background: var(--glass-grouped-strong);
+      border: 1px solid var(--glass-hairline);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      user-select: none;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .cc-slider-pill:active {
+      transform: scale(0.99);
+    }
+
+    .cc-slider-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      border-radius: 9999px;
+      pointer-events: none;
+      transition: width 0.08s ease-out, background-color 0.25s ease;
+    }
+
+    .cc-slider-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: ew-resize;
+      margin: 0;
+      z-index: 20;
+    }
+
+    /* =========================================================================
+       APPLE INTELLIGENCE IRIDESCENT BANNER BORDER
+       ========================================================================= */
+    .apple-intel-banner {
+      position: relative;
+      border-radius: 22px;
+      background: var(--glass-surface-elevated);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      box-shadow:
+        inset 0 1px 0 0 var(--glass-specular),
+        0 8px 24px -6px var(--glass-shadow);
+    }
+
+    .apple-intel-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      padding: 1.5px;
+      background: linear-gradient(120deg, #007AFF, #32ADE6, #AF52DE, #FF9500, #34C759);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    /* =========================================================================
+       ANIMATIONS (FLOW PARTICLES, MAP PINS, RADAR SWEEP)
+       ========================================================================= */
+    @keyframes flowParticles {
+      to { stroke-dashoffset: -48; }
+    }
+
+    @keyframes flowParticlesReverse {
+      to { stroke-dashoffset: 48; }
+    }
+
+    @keyframes iosPinPulse {
+      0% { transform: scale(0.85); opacity: 0.85; }
+      75% { transform: scale(2.15); opacity: 0; }
+      100% { transform: scale(2.15); opacity: 0; }
+    }
+
+    @keyframes radarRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-stream {
+      stroke-dasharray: 8 8;
+      animation: flowParticles 1.4s linear infinite;
+    }
+
+    .animate-stream-reverse {
+      stroke-dasharray: 8 8;
+      animation: flowParticlesReverse 1.5s linear infinite;
+    }
+
+    .animate-canal {
+      stroke-dasharray: 10 8;
+      animation: flowParticles 1.8s linear infinite;
+    }
+
+    .map-pin-pulse {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: iosPinPulse 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
+
+    .radar-sweep {
+      transform-origin: 410px 295px;
+      animation: radarRotate 9s linear infinite;
+    }
+
+    /* Custom Apple-style Thin Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(142, 142, 147, 0.35); border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-blue-500/20">
+
+  <!-- Ambient Liquid Glass Refraction Mesh -->
+  <div class="ambient-mesh"></div>
+
+  <!-- =========================================================================
+       TOP iOS 26 STATUS BAR & INTERACTIVE DYNAMIC ISLAND LIVE ACTIVITY
+       ========================================================================= -->
+  <div class="sticky top-0 z-40 px-3 sm:px-6 pt-2.5 pb-1.5 backdrop-blur-xl" style="background: linear-gradient(to bottom, var(--ios-bg) 65%, transparent);">
+    <div class="max-w-[1640px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-2">
+      
+      <!-- Left iOS Status Telemetry Strip -->
+      <div class="flex items-center gap-2 text-[11px] font-semibold text-ios-secondary">
+        <span id="liveClock" class="font-bold text-ios-primary">16:14</span>
+        <span class="opacity-40">•</span>
+        <span class="flex items-center gap-1.5 text-[#007AFF] dark:text-[#64D2FF]">
+          <span class="w-2 h-2 rounded-full bg-[#34C759] animate-pulse"></span>
+          BKK ICT Live • 5G BMA Mesh
+        </span>
+        <span class="hidden sm:inline opacity-40">•</span>
+        <span class="hidden sm:inline px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FF9500]/15 text-[#FF9500]">
+          Simulated Telemetry for Academic Demonstration
+        </span>
+      </div>
+
+      <!-- Center Morphing Dynamic Island Live Activity -->
+      <button id="dynamicIslandPill" onclick="onDynamicIslandTap()" title="Tap to inspect Live Activity or run PLC Remediation"
+        class="dynamic-island px-4 py-1.5 flex items-center gap-3 text-xs cursor-pointer">
+        <span id="diStatusDot" class="w-2.5 h-2.5 rounded-full bg-[#30D158] shrink-0"></span>
+        <span id="diPrimaryText" class="font-semibold tracking-tight whitespace-nowrap">
+          BMA Grid Optimal • 24/158 Pumps Eco
+        </span>
+        <span class="h-3.5 w-px bg-white/20"></span>
+        <span id="diSecondaryBadge" class="tabular-mono text-[11px] font-bold text-[#64D2FF] whitespace-nowrap">
+          10.0 mm/hr • 88% Biogas
+        </span>
+      </button>
+
+      <!-- Right iOS System Controls -->
+      <div class="flex items-center gap-2">
+        <!-- Daylight / Midnight Segmented Control -->
+        <div class="ios-segmented text-xs" role="group" aria-label="Appearance Mode">
+          <button id="segDaylight" onclick="setTheme('daylight')" class="ios-seg-btn active px-3 py-1 flex items-center gap-1">
+            <span>☀️</span><span>Daylight</span>
+          </button>
+          <button id="segMidnight" onclick="setTheme('midnight')" class="ios-seg-btn px-3 py-1 text-ios-secondary flex items-center gap-1">
+            <span>🌙</span><span>Midnight</span>
+          </button>
+        </div>
+
+        <!-- Backend Connection Status Pill -->
+        <button id="backendStatusBtn" onclick="checkFastAPIBackend(true)"
+          class="px-3 py-1.5 rounded-full text-[11px] font-semibold flex items-center gap-1.5 border border-ios-hairline cursor-pointer transition hover:opacity-85"
+          style="background: var(--glass-surface-elevated);">
+          <span id="backendDot" class="w-2 h-2 rounded-full bg-[#007AFF]"></span>
+          <span id="backendText" class="text-ios-primary">Edge Engine Active</span>
+        </button>
+
+        <!-- Inspect app.py Backend Button -->
+        <button onclick="openModal('backendModal')"
+          class="px-3.5 py-1.5 rounded-full text-[11px] font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] shadow-sm transition cursor-pointer flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+          </svg>
+          <span>Inspect app.py</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       EXECUTIVE iOS NAVIGATION HEADER & APPLE INTELLIGENCE PITCH BANNER
+       ========================================================================= -->
+  <header class="max-w-[1640px] mx-auto px-4 sm:px-6 pt-2 pb-4">
+    <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+      
+      <!-- Large iOS Navigation Title -->
+      <div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-11 h-11 rounded-[15px] bg-gradient-to-br from-[#007AFF] via-[#32ADE6] to-[#34C759] flex items-center justify-center text-white shadow-md">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5s1.4 1.8 3.5 1.8 3.5-1.8 3.5-1.8"/>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-ios-primary">
+                UNCLOG 2035
+              </h1>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#007AFF]/12 text-[#007AFF]">
+                
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm font-medium text-ios-tertiary">
+              Bangkok Smart Flood &amp; Waste Recovery Network • SC106 Group 8 — Urban Services &amp; Infrastructure
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Pitch Framing Banner (Apple Intelligence Iridescent Liquid Glass) -->
+      <div class="apple-intel-banner xl:max-w-2xl px-4 py-3">
+        <div class="flex items-start gap-2.5">
+          <span class="mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white bg-gradient-to-r from-[#007AFF] to-[#AF52DE] shrink-0">
+            Core Thesis
+          </span>
+          <p class="text-xs sm:text-[13.5px] font-semibold leading-snug text-ios-primary">
+            “This is not a flood project — it is a waste-sorting and real-time-monitoring project that solves flooding at its root cause.”
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hardcoded BMA Infrastructure & Economic Benchmarks Capsule Strip -->
+    <div class="mt-3.5 liquid-glass px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div class="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-ios-secondary">
+        <span class="font-bold text-[#007AFF]">BMA Network:</span>
+        <span><strong class="text-ios-primary">6,400 km</strong> Pipes</span>
+        <span class="opacity-35">|</span>
+        <span><strong class="text-ios-primary">1,682</strong> Canals</span>
+        <span class="opacity-35">|</span>
+        <span><strong class="text-ios-primary">158</strong> Pump Stations</span>
+        <span class="opacity-35">|</span>
+        <span><strong class="text-ios-primary">25</strong> Biochar Retention Areas</span>
+        <span class="opacity-35">|</span>
+        <span><strong class="text-ios-primary">50</strong> Districts</span>
+        <span class="opacity-35">|</span>
+        <span class="font-semibold text-[#FF9500]">Limit: 60 mm/hr</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-[11px] font-medium text-ios-tertiary">
+          Waste: <strong class="text-ios-primary">~70,000 t/yr</strong> Waterway • <strong class="text-ios-primary">6,908 t/yr</strong> Pump Clogs • <strong class="text-ios-primary">15 t/day</strong> Phra Khanong
+        </span>
+        <button onclick="openModal('benchmarksModal')"
+          class="px-3 py-1 rounded-full text-[11px] font-bold bg-[#34C759]/15 text-[#28CD41] hover:bg-[#34C759]/25 transition cursor-pointer">
+          Avoids THB 70–80B/yr (2011 &amp; Sept 2026 Data) ↗
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       MAIN iPadOS 26 SPATIAL WORKSPACE (3 SYNCHRONIZED BENTO COLUMNS + PIPELINE)
+       ========================================================================= -->
+  <main class="max-w-[1640px] mx-auto px-4 sm:px-6 pb-8 space-y-5">
+
+    <!-- =======================================================================
+         TOP ROW: 3 SYNCHRONIZED INTERACTIVE VIEWS
+         ======================================================================= -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+
+      <!-- =====================================================================
+           COLUMN 1 (3 COLS): iOS CONTROL CENTER SCENARIO & TELEMETRY DECK
+           ===================================================================== -->
+      <section class="xl:col-span-3 space-y-4">
+        
+        <!-- Control Center Scenario Switcher Card -->
+        <div class="liquid-glass p-4 sm:p-5 space-y-3.5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#007AFF]">Control Center</span>
+              <h2 class="text-lg font-bold tracking-tight text-ios-primary">Bangkok Scenarios</h2>
+            </div>
+            <span id="scenarioSeverityBadge" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#34C759]/15 text-[#28CD41]">
+              GREEN • NORMAL
+            </span>
+          </div>
+
+          <!-- iOS Segmented Control for 3 Scenarios -->
+          <div class="ios-segmented w-full grid grid-cols-3 text-xs">
+            <button id="segNormal" onclick="applyScenario('normal')" class="ios-seg-btn active py-2 px-1.5 text-center">
+              Normal
+            </button>
+            <button id="segBlockage" onclick="applyScenario('blockage')" class="ios-seg-btn py-2 px-1.5 text-center text-ios-secondary">
+              Clog &amp; FOG
+            </button>
+            <button id="segFlood" onclick="applyScenario('flood')" class="ios-seg-btn py-2 px-1.5 text-center text-ios-secondary">
+              Cloudburst
+            </button>
+          </div>
+
+          <!-- Active Scenario Narrative Summary -->
+          <div id="scenarioSummaryBox" class="liquid-module p-3.5 text-xs leading-relaxed text-ios-secondary">
+            <div class="font-bold text-ios-primary mb-0.5" id="scenarioSummaryTitle">
+              Normal Dry-Season Conditions (GREEN)
+            </div>
+            <p id="scenarioSummaryDesc">
+              10 mm/hr rainfall, 4.2 m³/s healthy pipe flow, 18% grate debris, pH 7.0 FOG, 14 t/day sorted organics powering dry-season biogas eco-pumping.
+            </p>
+          </div>
+
+          <!-- Apple Control Center Thick Pill Sliders (38px tall) -->
+          <div class="space-y-2.5 pt-1">
+            <div class="flex items-center justify-between text-[11px] font-semibold text-ios-tertiary px-1">
+              <span>LIVE LAYER 1 SENSOR OVERRIDES</span>
+              <span>Drag Pills</span>
+            </div>
+
+            <!-- Pill Slider 1: Rainfall Intensity (0 - 120 mm/hr) -->
+            <div>
+              <div class="cc-slider-pill" id="pillRain">
+                <div id="fillRain" class="cc-slider-fill bg-[#007AFF]/25" style="width: 8.3%;"></div>
+                <!-- 60 mm/hr BMA Limit Tick Mark (50%) -->
+                <div class="absolute top-1.5 bottom-1.5 left-1/2 w-0.5 bg-[#FF3B30]/75 z-10 pointer-events-none" title="60 mm/hr BMA Limit"></div>
+                <div class="relative z-10 h-full px-3.5 flex items-center justify-between pointer-events-none text-xs">
+                  <span class="flex items-center gap-2 font-semibold text-ios-primary">
+                    <svg class="w-4 h-4 text-[#007AFF]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M20 16.2A4.5 4.5 0 0017.5 8h-1.8A7 7 0 104 14.9M16 14v6m-4-4v6m-4-6v6"/>
+                    </svg>
+                    <span>Rainfall</span>
+                  </span>
+                  <span id="labelRain" class="tabular-mono font-bold text-ios-primary">10 mm/hr</span>
+                </div>
+                <input id="inputRain" type="range" min="0" max="120" step="1" value="10" oninput="onPillSliderInput()" class="cc-slider-input" aria-label="Rainfall Intensity"/>
+              </div>
+              <div class="flex justify-between text-[10px] text-ios-tertiary px-2 mt-0.5">
+                <span>0</span>
+                <span class="text-[#FF3B30] font-semibold">60 mm/hr BMA Limit</span>
+                <span>120</span>
+              </div>
+            </div>
+
+            <!-- Pill Slider 2: Grate Debris Obstruction (0 - 100%) -->
+            <div>
+              <div class="cc-slider-pill" id="pillDebris">
+                <div id="fillDebris" class="cc-slider-fill bg-[#FF9500]/25" style="width: 18%;"></div>
+                <div class="relative z-10 h-full px-3.5 flex items-center justify-between pointer-events-none text-xs">
+                  <span class="flex items-center gap-2 font-semibold text-ios-primary">
+                    <svg class="w-4 h-4 text-[#FF9500]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16M8 4v16M16 4v16"/>
+                    </svg>
+                    <span>Grate Debris</span>
+                  </span>
+                  <span id="labelDebris" class="tabular-mono font-bold text-ios-primary">18%</span>
+                </div>
+                <input id="inputDebris" type="range" min="0" max="100" step="1" value="18" oninput="onPillSliderInput()" class="cc-slider-input" aria-label="Grate Debris Obstruction"/>
+              </div>
+            </div>
+
+            <!-- Pill Slider 3: FOG Wastewater pH (4.5 - 8.5) -->
+            <div>
+              <div class="cc-slider-pill" id="pillPh">
+                <div id="fillPh" class="cc-slider-fill bg-[#AF52DE]/25" style="width: 62.5%;"></div>
+                <!-- Optimal Lipase Window 6.5 - 7.5 (50% to 75%) -->
+                <div class="absolute top-1.5 bottom-1.5 left-1/2 w-1/4 bg-[#34C759]/20 border-x border-[#34C759]/50 z-10 pointer-events-none"></div>
+                <div class="relative z-10 h-full px-3.5 flex items-center justify-between pointer-events-none text-xs">
+                  <span class="flex items-center gap-2 font-semibold text-ios-primary">
+                    <svg class="w-4 h-4 text-[#AF52DE]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <span>FOG Bio-pH</span>
+                  </span>
+                  <span id="labelPh" class="tabular-mono font-bold text-ios-primary">7.0 pH</span>
+                </div>
+                <input id="inputPh" type="range" min="4.5" max="8.5" step="0.1" value="7.0" oninput="onPillSliderInput()" class="cc-slider-input" aria-label="FOG Wastewater pH"/>
+              </div>
+              <div class="flex justify-between text-[10px] text-ios-tertiary px-2 mt-0.5">
+                <span>4.5 Acidic</span>
+                <span class="text-[#28CD41] font-semibold">6.5–7.5 Optimal Lipase</span>
+                <span>8.5</span>
+              </div>
+            </div>
+
+            <!-- Pill Slider 4: Sorted Organic Waste (0 - 40 tonnes/day) -->
+            <div>
+              <div class="cc-slider-pill" id="pillOrganics">
+                <div id="fillOrganics" class="cc-slider-fill bg-[#34C759]/25" style="width: 35%;"></div>
+                <div class="relative z-10 h-full px-3.5 flex items-center justify-between pointer-events-none text-xs">
+                  <span class="flex items-center gap-2 font-semibold text-ios-primary">
+                    <svg class="w-4 h-4 text-[#28CD41]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    <span>Sorted Organics</span>
+                  </span>
+                  <span id="labelOrganics" class="tabular-mono font-bold text-ios-primary">14 t/day</span>
+                </div>
+                <input id="inputOrganics" type="range" min="0" max="40" step="1" value="14" oninput="onPillSliderInput()" class="cc-slider-input" aria-label="Sorted Organic Waste"/>
+              </div>
+              <div class="flex justify-between text-[10px] text-ios-tertiary px-2 mt-0.5">
+                <span>0 t/d</span>
+                <span>Phra Khanong: 15 t/d</span>
+                <span>40 t/d</span>
+              </div>
+            </div>
+
+            <!-- Pill Slider 5: Chao Phraya Tide (+0.20 to +2.60 m MSL) -->
+            <div>
+              <div class="cc-slider-pill" id="pillTide">
+                <div id="fillTide" class="cc-slider-fill bg-[#32ADE6]/25" style="width: 27%;"></div>
+                <div class="relative z-10 h-full px-3.5 flex items-center justify-between pointer-events-none text-xs">
+                  <span class="flex items-center gap-2 font-semibold text-ios-primary">
+                    <svg class="w-4 h-4 text-[#32ADE6]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 15c2.483 0 4.345-1 6-3 1.655 2 3.517 3 6 3s4.345-1 6-3M3 19c2.483 0 4.345-1 6-3 1.655 2 3.517 3 6 3s4.345-1 6-3"/>
+                    </svg>
+                    <span>River Tide</span>
+                  </span>
+                  <span id="labelTide" class="tabular-mono font-bold text-ios-primary">+0.85 m</span>
+                </div>
+                <input id="inputTide" type="range" min="0.20" max="2.60" step="0.05" value="0.85" oninput="onPillSliderInput()" class="cc-slider-input" aria-label="Chao Phraya Tide"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prominent iOS Pill Button: Closed-Loop PLC Remediation -->
+          <div class="pt-1">
+            <button id="plcRemediationBtn" onclick="togglePlcRemediation()"
+              class="w-full py-3 px-4 rounded-full font-bold text-xs text-white bg-gradient-to-r from-[#007AFF] via-[#5856D6] to-[#AF52DE] hover:brightness-110 active:scale-[0.98] shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+              <span id="plcBtnIcon" class="w-2 h-2 rounded-full bg-white"></span>
+              <span id="plcBtnText">Run Closed-Loop PLC Remediation</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           COLUMN 2 (5 COLS): APPLE MAPS-INSPIRED BANGKOK DIGITAL TWIN
+           ===================================================================== -->
+      <section class="xl:col-span-5 space-y-4">
+        <div class="liquid-glass p-4 sm:p-5">
+          
+          <!-- Map Card Header -->
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#007AFF]"></span>
+              <h2 class="text-lg font-bold tracking-tight text-ios-primary">Bangkok Drainage &amp; Recovery Network</h2>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#007AFF]/12 text-[#007AFF]">
+              8 Active Hubs
+            </span>
+          </div>
+
+          <!-- Apple Maps Vector Canvas Container -->
+          <div class="relative rounded-[22px] overflow-hidden border border-ios-hairline shadow-inner" style="background: var(--map-canvas);">
+            
+            <!-- Floating Liquid Glass Map Layer Toggles (Top-Right) -->
+            <div class="absolute top-3 right-3 z-20 flex flex-col sm:flex-row items-end sm:items-center gap-1.5">
+              <button id="btnToggleRadar" onclick="toggleMapOverlay('radar')"
+                class="px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-white/40 shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[#007AFF] text-white">
+                <span class="w-2 h-2 rounded-full bg-white"></span>
+                <span>Rain Radar</span>
+              </button>
+
+              <button id="btnToggleRetention" onclick="toggleMapOverlay('retention')"
+                class="px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-white/40 shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[#AF52DE] text-white">
+                <span class="w-2 h-2 rounded-full bg-white"></span>
+                <span>25 Biochar Basins</span>
+              </button>
+            </div>
+
+            <!-- Apple Maps Vector Cartography SVG -->
+            <svg id="appleBangkokMap" viewBox="0 0 800 580" class="w-full h-auto block select-none">
+              <defs>
+                <radialGradient id="iosRadarPrimary" cx="50%" cy="50%" r="50%">
+                  <stop id="radarGrad1" offset="0%" stop-color="#007AFF" stop-opacity="0.30"/>
+                  <stop id="radarGrad2" offset="60%" stop-color="#32ADE6" stop-opacity="0.14"/>
+                  <stop offset="100%" stop-color="#32ADE6" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="iosBiocharGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#AF52DE" stop-opacity="0.40"/>
+                  <stop offset="70%" stop-color="#AF52DE" stop-opacity="0.12"/>
+                  <stop offset="100%" stop-color="#AF52DE" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Apple Maps Landmass Polygons -->
+              <g fill="var(--map-land)" stroke="var(--map-road-casing)" stroke-width="1.5">
+                <!-- North Bangkok (Chatuchak / Bang Sue / Lat Phrao) -->
+                <polygon points="175,20 465,20 525,160 365,190 210,165"/>
+                <!-- Central Core (Din Daeng / Pathum Wan / Ratchathewi) -->
+                <polygon points="210,165 365,190 490,215 478,315 240,308 188,245"/>
+                <!-- Eastern Corridor (Watthana / Khlong Toei / Phra Khanong / Prawet) -->
+                <polygon points="478,315 755,255 775,455 520,465 385,405 352,338"/>
+                <!-- Thonburi West Bank -->
+                <polygon points="35,125 190,155 182,330 232,440 75,480 28,295"/>
+                <!-- South Estuary / Bang Na -->
+                <polygon points="260,440 520,465 745,470 725,560 288,560"/>
+              </g>
+
+              <!-- Apple Maps Green Parks & Retention Parks -->
+              <g fill="var(--map-park)">
+                <!-- Chatuchak / Wachirabenchathat Park -->
+                <ellipse cx="328" cy="112" rx="28" ry="18"/>
+                <!-- Lumphini Park -->
+                <rect x="302" y="294" width="26" height="18" rx="6"/>
+                <!-- Benjakitti Forest Park -->
+                <rect x="372" y="310" width="22" height="24" rx="6"/>
+                <!-- Nong Bon Water Sports & Biochar Park -->
+                <ellipse cx="645" cy="402" rx="34" ry="22"/>
+              </g>
+
+              <!-- Apple Maps Major Road Arteries & Expressways -->
+              <g fill="none" stroke-linecap="round">
+                <!-- Vibhavadi Rangsit / Din Daeng Expressway -->
+                <path d="M 358 22 L 348 155 L 352 245 L 332 335" stroke="var(--map-road-casing)" stroke-width="7"/>
+                <path d="M 358 22 L 348 155 L 352 245 L 332 335" stroke="var(--map-highway)" stroke-width="3.5"/>
+
+                <!-- Sukhumvit Road Artery -->
+                <path d="M 320 278 L 435 318 L 535 395 L 635 495" stroke="var(--map-road-casing)" stroke-width="6.5"/>
+                <path d="M 320 278 L 435 318 L 535 395 L 635 495" stroke="var(--map-road-fill)" stroke-width="3.5"/>
+
+                <!-- Rama IV / Phetchaburi Arteries -->
+                <path d="M 225 268 L 495 256 L 740 245" stroke="var(--map-road-casing)" stroke-width="5.5"/>
+                <path d="M 225 268 L 495 256 L 740 245" stroke="var(--map-road-fill)" stroke-width="3"/>
+                <path d="M 248 312 L 385 338 L 485 362" stroke="var(--map-road-casing)" stroke-width="5.5"/>
+                <path d="M 248 312 L 385 338 L 485 362" stroke="var(--map-road-fill)" stroke-width="3"/>
+              </g>
+
+              <!-- Apple Maps District Typography -->
+              <g fill="var(--text-tertiary)" font-size="9.5" font-weight="700" opacity="0.65" letter-spacing="0.8">
+                <text x="242" y="75">CHATUCHAK</text>
+                <text x="255" y="232">PATHUM WAN</text>
+                <text x="538" y="318">PHRA KHANONG</text>
+                <text x="615" y="445">PRAWET</text>
+                <text x="68" y="275">THONBURI</text>
+                <text x="415" y="528">BANG NA</text>
+              </g>
+
+              <!-- MAJOR BANGKOK CANALS (KHLONGS) -->
+              <g fill="none" stroke-linecap="round">
+                <!-- Khlong Lat Phrao -->
+                <path d="M 392 30 L 374 142 L 368 232" stroke="var(--map-canal)" stroke-width="5" stroke-opacity="0.4"/>
+                <path d="M 392 30 L 374 142 L 368 232" stroke="var(--map-canal)" stroke-width="2.2" class="animate-canal"/>
+
+                <!-- Khlong Saen Saep -->
+                <path d="M 220 248 L 332 245 L 415 238 L 565 215 L 760 192" stroke="var(--map-canal)" stroke-width="6" stroke-opacity="0.42"/>
+                <path d="M 220 248 L 332 245 L 415 238 L 565 215 L 760 192" stroke="var(--map-canal)" stroke-width="2.4" class="animate-canal"/>
+
+                <!-- Khlong Phra Khanong -->
+                <path d="M 375 368 L 482 360 L 645 385 L 770 375" stroke="var(--map-canal)" stroke-width="6" stroke-opacity="0.42"/>
+                <path d="M 375 368 L 482 360 L 645 385 L 770 375" stroke="var(--map-canal)" stroke-width="2.4" class="animate-canal"/>
+
+                <!-- Khlong Bangkok Yai (Thonburi West Bank) -->
+                <path d="M 42 332 L 135 316 L 195 308" stroke="var(--map-canal)" stroke-width="4.5" stroke-opacity="0.38"/>
+                <path d="M 42 332 L 135 316 L 195 308" stroke="var(--map-canal)" stroke-width="2" class="animate-canal"/>
+              </g>
+
+              <!-- Canal Labels -->
+              <g fill="var(--sys-blue)" font-size="9" font-weight="700">
+                <text x="488" y="210" transform="rotate(-7 488 210)">Khlong Saen Saep</text>
+                <text x="505" y="352" transform="rotate(6 505 352)">Khlong Phra Khanong</text>
+                <text x="385" y="96">Khlong Lat Phrao</text>
+                <text x="54" y="346" transform="rotate(-8 54 346)">Khlong Bangkok Yai</text>
+              </g>
+
+              <!-- CHAO PHRAYA RIVER -->
+              <path d="M 202 15 C 212 90, 192 155, 202 220 C 212 270, 182 310, 212 350 C 242 390, 342 360, 362 400 C 382 440, 288 450, 272 490 C 258 530, 312 560, 322 580"
+                fill="none" stroke="var(--map-water)" stroke-width="24" stroke-linecap="round"/>
+              <path d="M 202 15 C 212 90, 192 155, 202 220 C 212 270, 182 310, 212 350 C 242 390, 342 360, 362 400 C 382 440, 288 450, 272 490 C 258 530, 312 560, 322 580"
+                fill="none" stroke="var(--map-water-stroke)" stroke-width="2" stroke-opacity="0.7" class="animate-canal"/>
+              <text x="148" y="190" fill="var(--sys-blue)" font-size="10" font-weight="800" transform="rotate(82 148 190)" letter-spacing="1.2">
+                CHAO PHRAYA RIVER
+              </text>
+
+              <!-- ===============================================================
+                   OVERLAY 1: 25 BIOCHAR RETENTION CORRIDORS
+                   =============================================================== -->
+              <g id="mapRetentionOverlay" class="transition-opacity duration-300">
+                <circle cx="645" cy="402" r="46" fill="url(#iosBiocharGrad)"/>
+                <rect x="615" y="384" width="60" height="36" rx="12" fill="#AF52DE" fill-opacity="0.22" stroke="#AF52DE" stroke-width="1.6" stroke-dasharray="4 3"/>
+                <text x="645" y="434" text-anchor="middle" fill="#AF52DE" font-size="8.5" font-weight="800">BASIN #04/25 BIOCHAR</text>
+
+                <circle cx="408" cy="238" r="36" fill="url(#iosBiocharGrad)"/>
+                <rect x="386" y="223" width="44" height="28" rx="10" fill="#AF52DE" fill-opacity="0.22" stroke="#AF52DE" stroke-width="1.6" stroke-dasharray="4 3"/>
+
+                <circle cx="348" cy="92" r="14" fill="#AF52DE" fill-opacity="0.22" stroke="#AF52DE" stroke-width="1.3"/>
+                <circle cx="565" cy="272" r="14" fill="#AF52DE" fill-opacity="0.22" stroke="#AF52DE" stroke-width="1.3"/>
+                <circle cx="122" cy="272" r="14" fill="#AF52DE" fill-opacity="0.22" stroke="#AF52DE" stroke-width="1.3"/>
+
+                <!-- Biochar Diversion Vectors -->
+                <path d="M 482 360 Q 552 372 616 398" fill="none" stroke="#AF52DE" stroke-width="2.2" class="animate-stream"/>
+                <path d="M 332 245 Q 362 241 386 238" fill="none" stroke="#AF52DE" stroke-width="2.2" class="animate-stream"/>
+              </g>
+
+              <!-- ===============================================================
+                   OVERLAY 2: DOPPLER RAINFALL RADAR OVERLAY
+                   =============================================================== -->
+              <g id="mapRadarOverlay" class="transition-opacity duration-300 pointer-events-none">
+                <circle cx="455" cy="275" r="185" fill="url(#iosRadarPrimary)"/>
+                <g class="radar-sweep" opacity="0.32">
+                  <line x1="410" y1="295" x2="615" y2="295" stroke="#007AFF" stroke-width="1.5"/>
+                  <circle cx="410" cy="295" r="125" fill="none" stroke="#007AFF" stroke-width="1" stroke-dasharray="4 6"/>
+                  <circle cx="410" cy="295" r="205" fill="none" stroke="#007AFF" stroke-width="1" stroke-dasharray="4 6"/>
+                </g>
+              </g>
+
+              <!-- ===============================================================
+                   8 INTERACTIVE APPLE MAPS INFRASTRUCTURE PINS (RENDERED BY JS)
+                   =============================================================== -->
+              <g id="appleMapPinsGroup"></g>
+            </svg>
+
+            <!-- Floating Map Status Legend Pill (Bottom) -->
+            <div class="absolute bottom-2.5 left-2.5 right-2.5 px-3.5 py-1.5 rounded-full backdrop-blur-xl border border-ios-hairline flex flex-wrap items-center justify-between gap-2 text-[10px] font-semibold"
+              style="background: var(--glass-surface-elevated);">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="flex items-center gap-1 text-[#28CD41]"><span class="w-2 h-2 rounded-full bg-[#34C759]"></span> Normal</span>
+                <span class="flex items-center gap-1 text-[#FF9500]"><span class="w-2 h-2 rounded-full bg-[#FF9500]"></span> Clog / FOG</span>
+                <span class="flex items-center gap-1 text-[#FF3B30]"><span class="w-2 h-2 rounded-full bg-[#FF3B30]"></span> Flood Risk (&gt;60mm/h)</span>
+                <span class="flex items-center gap-1 text-[#AF52DE]"><span class="w-2 h-2 rounded-full bg-[#AF52DE]"></span> 25 Biochar Basins</span>
+              </div>
+              <span class="text-ios-tertiary hidden sm:inline">Tap any pin for Place Card</span>
+            </div>
+          </div>
+
+          <!-- Apple Maps Floating Place Card Inspector -->
+          <div class="mt-3.5 liquid-module p-4">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span id="placeStatusPill" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#34C759]/15 text-[#28CD41]">
+                    NORMAL FLOW
+                  </span>
+                  <span id="placeCoords" class="tabular-mono text-[11px] font-medium text-[#007AFF]">
+                    13.7022° N, 100.5925° E
+                  </span>
+                </div>
+                <h3 id="placeTitle" class="text-base font-bold text-ios-primary mt-1">
+                  Phra Khanong Pumping &amp; Sorting Hub
+                </h3>
+                <p id="placeSubtitle" class="text-xs text-ios-tertiary">
+                  Khlong Toei / Phra Khanong • Primary eastern canal station (15 tonnes/day refuse benchmark)
+                </p>
+              </div>
+              <div class="w-9 h-9 rounded-full bg-[#007AFF]/12 text-[#007AFF] flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <circle cx="12" cy="11" r="3"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Layer 1 Physical vs Layer 2 AI Decision Comparison -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3 text-xs">
+              <div class="p-2.5 rounded-[14px] border border-ios-hairline" style="background: var(--glass-surface-solid);">
+                <div class="text-[10px] font-bold uppercase text-[#007AFF]">Layer 1 Physical Sensor</div>
+                <div id="placeL1Val" class="tabular-mono font-bold text-ios-primary mt-0.5">38% Level • 18% Clog</div>
+              </div>
+              <div class="p-2.5 rounded-[14px] border border-ios-hairline" style="background: var(--glass-surface-solid);">
+                <div class="text-[10px] font-bold uppercase text-[#AF52DE]">Layer 2 AI Decision</div>
+                <div id="placeL2Val" class="tabular-mono font-bold text-ios-primary mt-0.5">YOLOv8 Gate + Eco Pump</div>
+              </div>
+              <div class="p-2.5 rounded-[14px] border border-ios-hairline" style="background: var(--glass-surface-solid);">
+                <div class="text-[10px] font-bold uppercase text-[#28CD41]">Active PLC Actuator</div>
+                <div id="placePlcVal" class="tabular-mono font-bold text-[#28CD41] mt-0.5">15 t/d SORT • 65% SLUICE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           COLUMN 3 (4 COLS): APPLE ACTIVITY RINGS & BCG / ESG IMPACT PANEL
+           ===================================================================== -->
+      <section class="xl:col-span-4 space-y-4">
+        
+        <!-- Apple Activity-Style Pumping & Circular Recovery Card -->
+        <div class="liquid-glass p-4 sm:p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#28CD41]">Activity &amp; BCG Impact</span>
+              <h2 class="text-lg font-bold tracking-tight text-ios-primary">Pumping &amp; Circular Recovery</h2>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#34C759]/15 text-[#28CD41]">
+              THB 70–80B/yr Saved
+            </span>
+          </div>
+
+          <!-- Three Concentric Apple Fitness/Home Activity Rings + Live Legend -->
+          <div class="liquid-module p-4 flex flex-col sm:flex-row items-center gap-4">
+            <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+              <svg viewBox="0 0 140 140" class="w-full h-full -rotate-90">
+                <!-- Outer Ring Track & Progress: Active Pumps (X / 158) -->
+                <circle cx="70" cy="70" r="58" fill="none" stroke="#007AFF" stroke-opacity="0.18" stroke-width="11"/>
+                <circle id="ringPumps" cx="70" cy="70" r="58" fill="none" stroke="#007AFF" stroke-width="11" stroke-linecap="round"
+                  stroke-dasharray="364.4" stroke-dashoffset="309.0" style="transition: stroke-dashoffset 0.5s cubic-bezier(0.22, 1, 0.36, 1);"/>
+
+                <!-- Middle Ring Track & Progress: Scope 2 Biogas Share (%) -->
+                <circle cx="70" cy="70" r="44" fill="none" stroke="#34C759" stroke-opacity="0.18" stroke-width="11"/>
+                <circle id="ringBiogas" cx="70" cy="70" r="44" fill="none" stroke="#34C759" stroke-width="11" stroke-linecap="round"
+                  stroke-dasharray="276.5" stroke-dashoffset="33.2" style="transition: stroke-dashoffset 0.5s cubic-bezier(0.22, 1, 0.36, 1);"/>
+
+                <!-- Inner Ring Track & Progress: Organic Circular Recovery (%) -->
+                <circle cx="70" cy="70" r="30" fill="none" stroke="#AF52DE" stroke-opacity="0.18" stroke-width="11"/>
+                <circle id="ringRecovery" cx="70" cy="70" r="30" fill="none" stroke="#AF52DE" stroke-width="11" stroke-linecap="round"
+                  stroke-dasharray="188.5" stroke-dashoffset="22.6" style="transition: stroke-dashoffset 0.5s cubic-bezier(0.22, 1, 0.36, 1);"/>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-[9px] font-bold uppercase text-ios-tertiary">Biogas</span>
+                <span id="ringCenterPct" class="tabular-mono text-sm font-extrabold text-ios-primary">88%</span>
+              </div>
+            </div>
+
+            <!-- Ring Breakdown Stats -->
+            <div class="flex-1 w-full space-y-2.5 text-xs">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-[#007AFF] flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#007AFF]"></span> Active Pumps
+                  </span>
+                  <span id="statActivePumps" class="tabular-mono font-bold text-ios-primary">24 / 158</span>
+                </div>
+                <div class="text-[11px] text-ios-tertiary">BMA flood pumping stations online</div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-[#28CD41] flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#34C759]"></span> Scope 2 Biogas
+                  </span>
+                  <span id="statBiogasShare" class="tabular-mono font-bold text-ios-primary">88% Share</span>
+                </div>
+                <div class="text-[11px] text-ios-tertiary">Clean electricity from sorted organics</div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-[#AF52DE] flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#AF52DE]"></span> Circular Recovery
+                  </span>
+                  <span id="statRecoveryPct" class="tabular-mono font-bold text-ios-primary">91% Diverted</span>
+                </div>
+                <div class="text-[11px] text-ios-tertiary">Biogas + pyrolysis biochar conversion</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- iOS Inset Grouped List: Power, Biochar & Scope 1/2/3 Carbon Reduction -->
+          <div class="liquid-module overflow-hidden divide-y divide-[var(--glass-hairline)] text-xs">
+            <div class="px-3.5 py-2.5 flex items-center justify-between">
+              <span class="font-medium text-ios-secondary">Station Pump Power Draw</span>
+              <span id="esgPowerMw" class="tabular-mono font-bold text-ios-primary">6.8 MW</span>
+            </div>
+            <div class="px-3.5 py-2.5 flex items-center justify-between">
+              <span class="font-medium text-ios-secondary">Pyrolysis Biochar Carbon Fixation</span>
+              <span id="esgBiochar" class="tabular-mono font-bold text-[#AF52DE]">3.5 t/day (9.1 tCO₂e/d)</span>
+            </div>
+            <div class="px-3.5 py-2.5 flex items-center justify-between">
+              <span class="font-medium text-ios-secondary">Scope 1 • VRP Fleet Diesel Saved</span>
+              <span id="esgScope1" class="tabular-mono font-bold text-[#28CD41]">-1,420 tCO₂e/yr</span>
+            </div>
+            <div class="px-3.5 py-2.5 flex items-center justify-between">
+              <span class="font-medium text-ios-secondary">Scope 2 • Biogas Pump Grid Offset</span>
+              <span id="esgScope2" class="tabular-mono font-bold text-[#007AFF]">-18,650 tCO₂e/yr</span>
+            </div>
+            <div class="px-3.5 py-2.5 flex items-center justify-between">
+              <span class="font-medium text-ios-secondary">Scope 3 • Landfill CH₄ Prevented</span>
+              <span id="esgScope3" class="tabular-mono font-bold text-[#AF52DE]">-42,800 tCO₂e/yr</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layer 2 AI Intelligence Compact Operations Card -->
+        <div class="liquid-glass p-4 sm:p-5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#AF52DE]">Layer 2 AI Engine</span>
+              <h2 class="text-base font-bold tracking-tight text-ios-primary">4 Automated Intelligence Modules</h2>
+            </div>
+            <span class="text-[11px] font-semibold text-ios-tertiary">Tap any card</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Module A -->
+            <button onclick="openArchSheet('l2_modA')" class="liquid-module liquid-module-interactive p-3 text-left cursor-pointer">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-[#007AFF]">Module A • LSTM</span>
+                <span id="cardModABadge" class="tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#34C759]/15 text-[#28CD41]">11% Risk</span>
+              </div>
+              <div class="font-bold text-xs text-ios-primary mt-1">Flood Prediction</div>
+              <div id="cardModASub" class="tabular-mono text-[11px] text-ios-tertiary mt-0.5">3–6h: 0cm • 0/50 Dist.</div>
+            </button>
+
+            <!-- Module B -->
+            <button onclick="openArchSheet('l2_modB')" class="liquid-module liquid-module-interactive p-3 text-left cursor-pointer">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-[#FF9500]">Module B • CV</span>
+                <span id="cardModBBadge" class="tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#34C759]/15 text-[#28CD41]">0.14 Score</span>
+              </div>
+              <div class="font-bold text-xs text-ios-primary mt-1">Clog &amp; YOLOv8 Sort</div>
+              <div id="cardModBSub" class="tabular-mono text-[11px] text-ios-tertiary mt-0.5">64% Org / 36% Plastic</div>
+            </button>
+
+            <!-- Module C -->
+            <button onclick="openArchSheet('l2_modC')" class="liquid-module liquid-module-interactive p-3 text-left cursor-pointer">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-[#AF52DE]">Module C • VRP/Bio</span>
+                <span id="cardModCBadge" class="tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#AF52DE]/15 text-[#AF52DE]">14.5 L/hr</span>
+              </div>
+              <div class="font-bold text-xs text-ios-primary mt-1">Crew &amp; Lipase Dose</div>
+              <div id="cardModCSub" class="tabular-mono text-[11px] text-ios-tertiary mt-0.5">4 Crews • FOG pH 7.0</div>
+            </button>
+
+            <!-- Module D -->
+            <button onclick="openArchSheet('l2_modD')" class="liquid-module liquid-module-interactive p-3 text-left cursor-pointer">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-[#28CD41]">Module D • MPC</span>
+                <span id="cardModDBadge" class="tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#34C759]/15 text-[#28CD41]">24/158</span>
+              </div>
+              <div class="font-bold text-xs text-ios-primary mt-1">Pump &amp; Microgrid</div>
+              <div id="cardModDSub" class="tabular-mono text-[11px] text-ios-tertiary mt-0.5">88% Scope 2 Biogas</div>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- =======================================================================
+         BOTTOM ROW: DUAL-LAYER CYBER-PHYSICAL PIPELINE (8 IoT -> 4 AI -> PLC)
+         ======================================================================= -->
+    <section class="liquid-glass p-4 sm:p-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#007AFF]/12 text-[#007AFF]">
+              Dual-Layer Cyber-Physical Architecture
+            </span>
+            <h2 class="text-base sm:text-lg font-bold tracking-tight text-ios-primary">
+              Layer 1 IoT &amp; Bio-Sensors → 5G BMA Mesh → Layer 2 AI Models → Closed-Loop PLC Feedback
+            </h2>
+          </div>
+          <p class="text-xs text-ios-tertiary mt-0.5">
+            Tap any of the <strong>8 Layer 1 Hardware/Bio Nodes</strong> or <strong>4 Layer 2 AI Intelligence Engines</strong> to inspect its telemetry contract and automated BMA operations.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3 text-[11px] font-semibold shrink-0">
+          <span class="flex items-center gap-1.5 text-[#007AFF]">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#007AFF]"></span> L1 Physical Sensor
+          </span>
+          <span class="flex items-center gap-1.5 text-[#AF52DE]">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#AF52DE]"></span> L2 AI &amp; PLC Loop
+          </span>
+        </div>
+      </div>
+
+      <!-- Animated SVG Pipeline Conduit -->
+      <div class="w-full overflow-x-auto pb-1">
+        <svg viewBox="0 0 1440 242" class="w-full min-w-[980px] h-auto select-none">
+          <defs>
+            <linearGradient id="iosCyanStream" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#007AFF" stop-opacity="0.35"/>
+              <stop offset="50%" stop-color="#32ADE6" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#AF52DE" stop-opacity="0.9"/>
+            </linearGradient>
+            <linearGradient id="iosFeedbackStream" x1="100%" y1="0%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="#AF52DE" stop-opacity="0.95"/>
+              <stop offset="50%" stop-color="#34C759" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#007AFF" stop-opacity="0.9"/>
+            </linearGradient>
+          </defs>
+
+          <!-- LAYER 1 CONTAINER -->
+          <rect x="6" y="6" width="552" height="178" rx="22" fill="var(--glass-grouped)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+          <text x="22" y="28" fill="#007AFF" font-size="10.5" font-weight="800" letter-spacing="0.6">LAYER 1 • IoT HARDWARE &amp; BIO-SENSING (8 NODES)</text>
+
+          <!-- Node 1: Water-Level -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_water')" transform="translate(18, 40)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">01 • WATER LEVEL</text>
+            <text id="pipe_l1_water" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">38% (1.52m)</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">6,400km / 1,682 canals</text>
+          </g>
+
+          <!-- Node 2: Flow-Rate -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_flow')" transform="translate(152, 40)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">02 • FLOW DOPPLER</text>
+            <text id="pipe_l1_flow" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">4.20 m³/s</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Subsurface pipe speed</text>
+          </g>
+
+          <!-- Node 3: Rainfall -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_rain')" transform="translate(286, 40)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">03 • RAIN GAUGE</text>
+            <text id="pipe_l1_rain" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">10.0 mm/hr</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Limit: 60 mm/hr BMA</text>
+          </g>
+
+          <!-- Node 4: Tide Gauge -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_tide')" transform="translate(420, 40)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">04 • TIDE GAUGE</text>
+            <text id="pipe_l1_tide" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">+0.85 m MSL</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Chao Phraya backwater</text>
+          </g>
+
+          <!-- Node 5: AI Grate Camera -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_cam')" transform="translate(18, 111)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">05 • GRATE CAMERA</text>
+            <text id="pipe_l1_cam" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">18% Debris</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Edge optical sluice eye</text>
+          </g>
+
+          <!-- Node 6: Smart Microgrid Meter -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_grid')" transform="translate(152, 111)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#007AFF" font-size="9" font-weight="800">06 • GRID METER</text>
+            <text id="pipe_l1_grid" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">6.8 MW (88%)</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">158 pump stations</text>
+          </g>
+
+          <!-- Node 7: FOG Bio-Sensor -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_fog')" transform="translate(286, 111)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#AF52DE" font-size="9" font-weight="800">07 • FOG BIO-SENSOR</text>
+            <text id="pipe_l1_fog" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">pH 7.0 | 29°C</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Lipase microbe monitor</text>
+          </g>
+
+          <!-- Node 8: RFID Waste-Sorting -->
+          <g class="cursor-pointer" onclick="openArchSheet('l1_rfid')" transform="translate(420, 111)">
+            <rect width="128" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="10" y="17" fill="#AF52DE" font-size="9" font-weight="800">08 • RFID SORTING</text>
+            <text id="pipe_l1_rfid" x="10" y="37" fill="var(--text-primary)" class="tabular-mono" font-size="13" font-weight="800">14.0 t/day</text>
+            <text x="10" y="53" fill="var(--text-tertiary)" font-size="9">Biogas &amp; biochar feed</text>
+          </g>
+
+          <!-- CONDUIT 1: Layer 1 -> Edge Gateway -->
+          <path d="M 558 95 L 636 95" stroke="url(#iosCyanStream)" stroke-width="3.5" fill="none" class="animate-stream"/>
+          <circle r="4.5" fill="#007AFF">
+            <animateMotion dur="1.3s" repeatCount="indefinite" path="M 558 95 L 636 95"/>
+          </circle>
+
+          <!-- EDGE GATEWAY BRIDGE -->
+          <g transform="translate(636, 34)">
+            <rect width="144" height="122" rx="20" fill="var(--glass-surface-solid)" stroke="#007AFF" stroke-width="1.6"/>
+            <circle cx="72" cy="27" r="12" fill="#007AFF" fill-opacity="0.14"/>
+            <circle cx="72" cy="27" r="4.5" fill="#007AFF"/>
+            <text x="72" y="54" text-anchor="middle" fill="#007AFF" font-size="10.5" font-weight="800">EDGE GATEWAY</text>
+            <text x="72" y="71" text-anchor="middle" fill="var(--text-primary)" font-size="10" font-weight="600">LoRaWAN / NB-IoT</text>
+            <text x="72" y="85" text-anchor="middle" fill="var(--text-primary)" font-size="10" font-weight="600">&amp; 5G BMA Mesh</text>
+            <rect x="20" y="96" width="104" height="17" rx="8.5" fill="#34C759" fill-opacity="0.16"/>
+            <text x="72" y="108" text-anchor="middle" fill="#28CD41" class="tabular-mono" font-size="9" font-weight="800">SYNC: 9.4ms TLS</text>
+          </g>
+
+          <!-- CONDUIT 2: Edge Gateway -> Layer 2 AI -->
+          <path d="M 780 95 L 858 95" stroke="url(#iosCyanStream)" stroke-width="3.5" fill="none" class="animate-stream"/>
+          <circle r="4.5" fill="#AF52DE">
+            <animateMotion dur="1.3s" begin="0.35s" repeatCount="indefinite" path="M 780 95 L 858 95"/>
+          </circle>
+
+          <!-- LAYER 2 CONTAINER -->
+          <rect x="858" y="6" width="576" height="178" rx="22" fill="var(--glass-grouped)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+          <text x="874" y="28" fill="#AF52DE" font-size="10.5" font-weight="800" letter-spacing="0.6">LAYER 2 • AI INTELLIGENCE &amp; AUTOMATED OPERATIONS (4 MODELS)</text>
+
+          <!-- Module A -->
+          <g class="cursor-pointer" onclick="openArchSheet('l2_modA')" transform="translate(870, 40)">
+            <rect width="272" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="11" y="17" fill="#007AFF" font-size="9.5" font-weight="800">MODULE A • FLOOD PREDICTION</text>
+            <text id="pipe_l2_modA" x="11" y="36" fill="var(--text-primary)" class="tabular-mono" font-size="12" font-weight="800">Risk: 11% | 3–6h Forecast: 0cm</text>
+            <text x="11" y="52" fill="var(--text-tertiary)" font-size="9">Spatio-Temporal LSTM + GBDT</text>
+          </g>
+
+          <!-- Module B -->
+          <g class="cursor-pointer" onclick="openArchSheet('l2_modB')" transform="translate(1148, 40)">
+            <rect width="272" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="11" y="17" fill="#FF9500" font-size="9.5" font-weight="800">MODULE B • CLOG &amp; SORTING CV</text>
+            <text id="pipe_l2_modB" x="11" y="36" fill="var(--text-primary)" class="tabular-mono" font-size="12" font-weight="800">Anomaly: 0.16 | 64% Org / 36% Plas</text>
+            <text x="11" y="52" fill="var(--text-tertiary)" font-size="9">Isolation Forest + YOLOv8 Gate</text>
+          </g>
+
+          <!-- Module C -->
+          <g class="cursor-pointer" onclick="openArchSheet('l2_modC')" transform="translate(870, 111)">
+            <rect width="272" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="11" y="17" fill="#AF52DE" font-size="9.5" font-weight="800">MODULE C • VRP &amp; LIPASE BIO-CTRL</text>
+            <text id="pipe_l2_modC" x="11" y="36" fill="var(--text-primary)" class="tabular-mono" font-size="12" font-weight="800">4 Crews | Lipase: 14.5 L/hr</text>
+            <text x="11" y="52" fill="var(--text-tertiary)" font-size="9">Multi-Obj VRP + FOG Bio-Feedback</text>
+          </g>
+
+          <!-- Module D -->
+          <g class="cursor-pointer" onclick="openArchSheet('l2_modD')" transform="translate(1148, 111)">
+            <rect width="272" height="63" rx="15" fill="var(--glass-surface-solid)" stroke="var(--glass-hairline)" stroke-width="1.2"/>
+            <text x="11" y="17" fill="#28CD41" font-size="9.5" font-weight="800">MODULE D • MPC PUMP &amp; MICROGRID</text>
+            <text id="pipe_l2_modD" x="11" y="36" fill="var(--text-primary)" class="tabular-mono" font-size="12" font-weight="800">24/158 Pumps | 88% Biogas S2</text>
+            <text x="11" y="52" fill="var(--text-tertiary)" font-size="9">MPC Sluice &amp; Closed-Loop PLC</text>
+          </g>
+
+          <!-- CLOSED-LOOP PLC ACTUATOR FEEDBACK PATH -->
+          <path d="M 1146 184 L 1146 218 L 282 218 L 282 184" stroke="url(#iosFeedbackStream)" stroke-width="2.5" fill="none" class="animate-stream-reverse"/>
+          <polygon points="282,182 277,192 287,192" fill="#007AFF"/>
+          <rect x="450" y="203" width="520" height="28" rx="14" fill="var(--glass-surface-solid)" stroke="#AF52DE" stroke-opacity="0.55" stroke-width="1.2"/>
+          <text id="pipeFeedbackBanner" x="710" y="221" text-anchor="middle" fill="#AF52DE" class="tabular-mono" font-size="10.5" font-weight="800">
+            CLOSED-LOOP PLC: Sluice 65% Open • Lipase Dosing 14.5 L/hr • 24/158 Pumps Eco
+          </text>
+          <circle r="4.5" fill="#34C759">
+            <animateMotion dur="3.1s" repeatCount="indefinite" path="M 1146 184 L 1146 218 L 282 218 L 282 184"/>
+          </circle>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       iOS SHEET MODAL 1: NODE & AI MODULE TELEMETRY CONTRACT INSPECTOR
+       ========================================================================= -->
+  <div id="archSheetModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/55 backdrop-blur-md">
+    <div class="liquid-glass w-full max-w-xl p-5 sm:p-6 space-y-4" style="background: var(--glass-surface-solid);">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <span id="sheetBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#007AFF]/15 text-[#007AFF]">
+            LAYER 1 PHYSICAL NODE
+          </span>
+          <h3 id="sheetTitle" class="text-lg sm:text-xl font-bold text-ios-primary mt-1.5">
+            Node Title
+          </h3>
+        </div>
+        <button onclick="closeModal('archSheetModal')" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-ios-secondary bg-[var(--glass-grouped-strong)] hover:opacity-80 cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <p id="sheetDesc" class="text-xs sm:text-sm leading-relaxed text-ios-secondary">
+        Description
+      </p>
+
+      <div class="liquid-module p-3.5 space-y-2 text-xs">
+        <div class="font-bold uppercase text-[10px] text-[#AF52DE]">Telemetry Schema &amp; Automated BMA Operation</div>
+        <pre id="sheetSchema" class="tabular-mono text-[11px] text-ios-primary overflow-x-auto leading-relaxed"></pre>
+      </div>
+
+      <div class="flex items-center justify-between pt-1">
+        <span id="sheetRoute" class="text-xs font-semibold text-[#007AFF]">Feeds → Module A &amp; Module B</span>
+        <button onclick="closeModal('archSheetModal')" class="px-5 py-2 rounded-full text-xs font-bold text-white bg-[#007AFF] hover:bg-[#0066D6] cursor-pointer">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       iOS SHEET MODAL 2: PYTHON FASTAPI BACKEND (app.py) INSPECTOR & DOWNLOAD
+       ========================================================================= -->
+  <div id="backendModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+    <div class="liquid-glass w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden" style="background: var(--glass-surface-solid);">
+      <div class="flex flex-wrap items-center justify-between gap-2 px-5 py-4 border-b border-ios-hairline">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#007AFF]/15 text-[#007AFF]">
+            Python FastAPI + Pydantic Server
+          </span>
+          <h3 class="text-lg font-bold text-ios-primary mt-1">app.py — UNCLOG 2035 Dual-Layer AI Inference Backend</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="copyBackendCode()" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#007AFF]/15 text-[#007AFF] hover:bg-[#007AFF]/25 transition cursor-pointer">
+            Copy Code
+          </button>
+          <button onclick="downloadBackendCode()" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-[#34C759] hover:brightness-105 transition cursor-pointer">
+            Download app.py
+          </button>
+          <button onclick="closeModal('backendModal')" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-ios-secondary bg-[var(--glass-grouped-strong)] cursor-pointer">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="px-5 py-2.5 text-xs tabular-mono border-b border-ios-hairline bg-[var(--glass-grouped)] flex flex-wrap items-center justify-between gap-2">
+        <span>Run locally: <strong class="text-[#007AFF]">pip install fastapi uvicorn pydantic &amp;&amp; uvicorn app:app --reload --port 8000</strong></span>
+        <span class="text-[#28CD41] font-bold">GET /api/scenarios/{id} • POST /api/simulate</span>
+      </div>
+
+      <div class="p-4 overflow-y-auto flex-1 tabular-mono text-xs leading-relaxed">
+        <pre id="fastapiCodePre" class="bg-[#1C1C1E] text-[#F5F5F7] p-4 rounded-[20px] overflow-x-auto"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       iOS SHEET MODAL 3: BMA HISTORICAL FLOOD LOSSES & ECONOMIC CASE
+       ========================================================================= -->
+  <div id="benchmarksModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+    <div class="liquid-glass w-full max-w-3xl p-5 sm:p-6 space-y-4" style="background: var(--glass-surface-solid);">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#34C759]/15 text-[#28CD41]">
+            Bangkok Metropolitan Administration (BMA) Data
+          </span>
+          <h3 class="text-lg sm:text-xl font-bold text-ios-primary mt-1">Historical Flood Losses &amp; UNCLOG 2035 ESG ROI</h3>
+        </div>
+        <button onclick="closeModal('benchmarksModal')" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-ios-secondary bg-[var(--glass-grouped-strong)] cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="liquid-module p-4 border-t-4 border-t-[#FF3B30]">
+          <div class="text-[10px] font-bold uppercase text-[#FF3B30]">2011 Great Flood</div>
+          <div class="text-xl font-extrabold text-ios-primary mt-1">THB 296 Billion</div>
+          <p class="text-xs text-ios-tertiary mt-1">Catastrophic Chao Phraya inundation paralyzing industrial estates &amp; inner Bangkok.</p>
+        </div>
+
+        <div class="liquid-module p-4 border-t-4 border-t-[#FF9500]">
+          <div class="text-[10px] font-bold uppercase text-[#FF9500]">Sept 2026 Extreme Event</div>
+          <div class="text-xl font-extrabold text-ios-primary mt-1">THB 25.3 Billion</div>
+          <p class="text-xs text-ios-tertiary mt-1">300+ mm rain over 3 days; all 50 districts declared disaster zones; ~700,000 residents affected.</p>
+        </div>
+
+        <div class="liquid-module p-4 border-t-4 border-t-[#34C759]">
+          <div class="text-[10px] font-bold uppercase text-[#28CD41]">UNCLOG 2035 Target</div>
+          <div class="text-xl font-extrabold text-[#28CD41] mt-1">THB 70–80B / yr</div>
+          <p class="text-xs text-ios-tertiary mt-1">Recurring annual flood damage avoided via root-cause waste interception &amp; AI pump control.</p>
+        </div>
+      </div>
+
+      <div class="liquid-module p-4 space-y-2 text-xs text-ios-secondary">
+        <h4 class="font-bold text-ios-primary">Root-Cause Waste &amp; Drainage Mechanics:</h4>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Bangkok's <strong>6,400 km</strong> pipe network and <strong>1,682 canals</strong> are rated for <strong>60 mm/hour</strong> rainfall, but <strong>~70,000 tonnes/year</strong> of waterway waste and <strong>6,908 tonnes/year</strong> clogging pumping stations choke hydraulic flow.</li>
+          <li><strong>Phra Khanong Pumping Station</strong> alone intercepts <strong>15 tonnes/day</strong> of refuse, while street-food Fats, Oils, and Grease (FOG) solidify inside sub-surface drains.</li>
+          <li><strong>UNCLOG 2035</strong> automates source waste sorting, hydrolyzes FOG with AI-dosed <strong>lipase-producing bacteria</strong>, and converts organics into <strong>Scope 2 biogas electricity</strong> (powering all 158 pump stations) and <strong>pyrolysis biochar</strong> (lining 25 retention basins).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS Notification Banner Toast -->
+  <div id="iosToast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 translate-y-2">
+    <div class="dynamic-island px-4 py-2 text-xs font-semibold flex items-center gap-2 shadow-2xl">
+      <span class="w-2 h-2 rounded-full bg-[#30D158]"></span>
+      <span id="iosToastText">Action completed</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT: DUAL-LAYER EDGE SIMULATION ENGINE & FASTAPI BRIDGE
+       ========================================================================= -->
+  <script>
+    // =========================================================================
+    // 1. COMPLETE RUNNABLE PYTHON FASTAPI BACKEND (app.py)
+    // =========================================================================
+    const FASTAPI_BACKEND_CODE = `"""
+UNCLOG 2035: A Smart Flood-Resilient Waste & Drainage Recovery Network for Bangkok
+SC106 Group 8 — Urban Services & Infrastructure
+Backend Cyber-Physical AI Inference Server (FastAPI)
+
+Run:
+    pip install fastapi uvicorn pydantic
+    uvicorn app:app --reload --port 8000
+"""
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from typing import Dict, Literal
+
+app = FastAPI(
+    title="UNCLOG 2035 Bangkok Spatial Digital Twin API",
+    description="Dual-Layer IoT Telemetry & AI Intelligence Engine for BMA Drainage & Waste Recovery",
+    version="2035.2.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+BMA_CONSTANTS = {
+    "drainage_pipes_km": 6400,
+    "canals_count": 1682,
+    "pumping_stations_total": 158,
+    "biochar_retention_areas": 25,
+    "bangkok_districts": 50,
+    "rainfall_capacity_limit_mm_hr": 60.0,
+    "waterway_waste_tonnes_yr": 70000,
+    "pump_clog_waste_tonnes_yr": 6908,
+    "phra_khanong_refuse_tonnes_day": 15.0,
+    "avoided_flood_damage_thb_billion_yr": "70-80",
+    "sept_2026_flood_loss_thb_billion": 25.3,
+    "flood_2011_loss_thb_billion": 296.0,
+}
+
+class TelemetryPayload(BaseModel):
+    rainfall_mm_hr: float = Field(10.0, ge=0, le=120)
+    grate_debris_pct: float = Field(18.0, ge=0, le=100)
+    fog_ph: float = Field(7.0, ge=4.5, le=8.5)
+    sorted_organics_t_day: float = Field(14.0, ge=0, le=40)
+    tide_m_msl: float = Field(0.85, ge=0.20, le=2.60)
+
+SCENARIOS: Dict[str, TelemetryPayload] = {
+    "normal": TelemetryPayload(
+        rainfall_mm_hr=10.0,
+        grate_debris_pct=18.0,
+        fog_ph=7.0,
+        sorted_organics_t_day=14.0,
+        tide_m_msl=0.85,
+    ),
+    "blockage": TelemetryPayload(
+        rainfall_mm_hr=22.0,
+        grate_debris_pct=85.0,
+        fog_ph=5.6,
+        sorted_organics_t_day=15.0,
+        tide_m_msl=1.25,
+    ),
+    "flood": TelemetryPayload(
+        rainfall_mm_hr=80.0,
+        grate_debris_pct=54.0,
+        fog_ph=6.4,
+        sorted_organics_t_day=36.0,
+        tide_m_msl=2.15,
+    ),
+}
+
+def run_dual_layer_inference(data: TelemetryPayload) -> dict:
+    clog_factor = data.grate_debris_pct / 100.0
+    tide_factor = max(0.0, (data.tide_m_msl - 0.8) / 1.8)
+
+    # Layer 1 Physical Sensor Readings
+    flow_rate_m3s = round(max(0.45, 4.75 * (1.0 - 0.78 * clog_factor) + (data.rainfall_mm_hr / 80.0) * 1.15 - tide_factor * 0.6), 2)
+    canal_level_pct = round(min(99.0, 24.0 + (data.rainfall_mm_hr / 60.0) * 44.0 + clog_factor * 36.0 + tide_factor * 18.0), 1)
+    canal_depth_m = round((canal_level_pct / 100.0) * 4.0, 2)
+    fog_temp_c = round(29.0 + max(0.0, (7.0 - data.fog_ph) * 2.5) - (data.rainfall_mm_hr / 100.0) * 2.5, 1)
+
+    # Module A: AI Flood Prediction Engine (Spatio-Temporal LSTM + GBDT)
+    flood_risk_pct = round(min(99.0, max(5.0, (data.rainfall_mm_hr / 60.0) * 58.0 + (canal_level_pct / 100.0) * 28.0 + tide_factor * 18.0)), 1)
+    waterlogging_cm = 0 if flood_risk_pct < 35 else round((flood_risk_pct - 32) * 0.65)
+    alert_districts = min(50, round((flood_risk_pct / 100.0) * 52))
+    retention_diversion_pct = min(100, round(10 + flood_risk_pct * 0.95))
+
+    # Module B: AI Clog Detection (Isolation Forest) & YOLOv8 Source Sorting
+    anomaly_score = round(min(0.99, 0.08 + clog_factor * 0.88 + max(0.0, (3.5 - flow_rate_m3s) * 0.05)), 2)
+    organic_split_pct = round(min(78.0, max(45.0, 65.0 - (data.rainfall_mm_hr / 120.0) * 15.0)), 1)
+
+    # Module C: Multi-Objective VRP Crew Dispatch & Lipase Bio-Augmentation
+    ph_deviation = max(0.0, 7.0 - data.fog_ph)
+    lipase_dosing_l_hr = round(12.0 + ph_deviation * 40.0 + (data.rainfall_mm_hr / 80.0) * 12.0, 1)
+    active_vrp_trucks = min(32, max(4, round(3 + clog_factor * 18 + (data.rainfall_mm_hr / 80.0) * 12)))
+
+    # Module D: MPC Smart Pump & Biogas Microgrid Optimizer
+    active_pumps = 158 if (data.rainfall_mm_hr >= 60.0 or canal_level_pct >= 92.0) else min(158, max(20, round(20 + (canal_level_pct / 100.0) * 138)))
+    power_mw = round(active_pumps * 0.30, 1)
+    biogas_mw = (data.sorted_organics_t_day / 14.0) * 6.0 + max(0.0, (data.sorted_organics_t_day - 14.0) / 22.0) * 23.4
+    biogas_share_pct = min(95, max(48, round((biogas_mw / max(1.0, power_mw)) * 100)))
+
+    # BCG / ESG Circular Impact
+    biochar_t_day = round(data.sorted_organics_t_day * 0.25, 1)
+    carbon_fixation_tco2e_day = round(biochar_t_day * 2.6, 1)
+    circular_recovery_pct = min(98, max(62, round(74 + (data.sorted_organics_t_day / 40.0) * 24 - clog_factor * 14)))
+
+    status = "GREEN"
+    if data.rainfall_mm_hr > 60.0 or canal_level_pct >= 90.0:
+        status = "RED"
+    elif data.grate_debris_pct >= 45.0 or data.fog_ph < 6.3 or flood_risk_pct >= 45.0:
+        status = "AMBER"
+
+    return {
+        "status": status,
+        "bma_constants": BMA_CONSTANTS,
+        "layer1_telemetry": {
+            "canal_level_pct": canal_level_pct,
+            "canal_depth_m": canal_depth_m,
+            "flow_rate_m3s": flow_rate_m3s,
+            "rainfall_mm_hr": data.rainfall_mm_hr,
+            "tide_m_msl": data.tide_m_msl,
+            "grate_debris_pct": data.grate_debris_pct,
+            "fog_ph": data.fog_ph,
+            "fog_temp_c": fog_temp_c,
+            "sorted_organics_t_day": data.sorted_organics_t_day,
+        },
+        "layer2_ai": {
+            "module_a_flood": {
+                "flood_risk_pct": flood_risk_pct,
+                "waterlogging_cm": waterlogging_cm,
+                "alert_districts": alert_districts,
+                "retention_diversion_pct": retention_diversion_pct,
+            },
+            "module_b_clog_cv": {
+                "anomaly_score": anomaly_score,
+                "organic_split_pct": organic_split_pct,
+                "plastic_split_pct": round(100.0 - organic_split_pct, 1),
+            },
+            "module_c_vrp_bio": {
+                "active_vrp_trucks": active_vrp_trucks,
+                "lipase_dosing_l_hr": lipase_dosing_l_hr,
+            },
+            "module_d_mpc_microgrid": {
+                "active_pumps": active_pumps,
+                "total_pumps": 158,
+                "power_mw": power_mw,
+                "biogas_share_pct": biogas_share_pct,
+            },
+        },
+        "esg_circular": {
+            "biochar_t_day": biochar_t_day,
+            "carbon_fixation_tco2e_day": carbon_fixation_tco2e_day,
+            "circular_recovery_pct": circular_recovery_pct,
+        }
+    }
+
+@app.get("/")
+def root():
+    return {"project": "UNCLOG 2035", "group": "SC106 Group 8", "constants": BMA_CONSTANTS}
+
+@app.get("/api/scenarios/{scenario_id}")
+def get_scenario(scenario_id: Literal["normal", "blockage", "flood"]):
+    if scenario_id not in SCENARIOS:
+        raise HTTPException(status_code=404, detail="Scenario not found")
+    return run_dual_layer_inference(SCENARIOS[scenario_id])
+
+@app.post("/api/simulate")
+def simulate(payload: TelemetryPayload):
+    return run_dual_layer_inference(payload)
+`;
+
+    // =========================================================================
+    // 2. APPLICATION STATE & DOMAIN METADATA
+    // =========================================================================
+    const state = {
+      theme: 'daylight',
+      backendConnected: false,
+      activeScenario: 'normal',
+      selectedHubId: 'phra_khanong',
+      overlays: {
+        radar: true,
+        retention: true,
+      },
+      plcActive: false,
+      plcTimer: null,
+      inputs: {
+        rainfall: 10,
+        debris: 18,
+        ph: 7.0,
+        organics: 14,
+        tide: 0.85,
+      }
+    };
+
+    const SCENARIO_META = {
+      normal: {
+        title: 'Normal Dry-Season Conditions (GREEN)',
+        desc: '10 mm/hr rainfall, 4.2 m³/s healthy pipe flow, 18% grate debris, pH 7.0 FOG, 14 t/day sorted organics powering dry-season biogas eco-pumping.',
+        badge: 'GREEN • NORMAL',
+        badgeClass: 'bg-[#34C759]/15 text-[#28CD41]',
+        values: { rainfall: 10, debris: 18, ph: 7.0, organics: 14, tide: 0.85 }
+      },
+      blockage: {
+        title: 'Clog & Grease Surge Pre-Storm (AMBER)',
+        desc: '22 mm/hr rain, flow drops to 1.1 m³/s, 85% rubbish clog at Phra Khanong (15 t/day load), FOG pH drops to 5.6. AI dispatches VRP crews & doses lipase BEFORE storms arrive.',
+        badge: 'AMBER • REMEDIATING',
+        badgeClass: 'bg-[#FF9500]/18 text-[#FF9500]',
+        values: { rainfall: 22, debris: 85, ph: 5.6, organics: 15, tide: 1.25 }
+      },
+      flood: {
+        title: 'Extreme Cloudburst Surge (RED)',
+        desc: '80 mm/hr heavy rainfall (exceeding 60 mm/hr BMA limit), +2.15 m MSL Chao Phraya tide, 97% drain crest. All 158 pumps & 25 biochar retention areas engaged.',
+        badge: 'RED • FLOOD CRITICAL',
+        badgeClass: 'bg-[#FF3B30]/18 text-[#FF3B30]',
+        values: { rainfall: 80, debris: 54, ph: 6.4, organics: 36, tide: 2.15 }
+      }
+    };
+
+    const BANGKOK_HUBS = [
+      {
+        id: 'phra_khanong',
+        shortName: 'Phra Khanong',
+        name: 'Phra Khanong Pumping & Sorting Hub',
+        coords: '13.7022° N, 100.5925° E',
+        district: 'Khlong Toei / Phra Khanong • 15 tonnes/day refuse benchmark',
+        x: 478,
+        y: 360
+      },
+      {
+        id: 'saen_saep_fog',
+        shortName: 'Saen Saep FOG',
+        name: 'Khlong Saen Saep – Pratunam FOG Corridor',
+        coords: '13.7501° N, 100.5408° E',
+        district: 'Ratchathewi / Pathum Wan • Street-vendor grease bio-remediation hub',
+        x: 332,
+        y: 245
+      },
+      {
+        id: 'lat_phrao_mrf',
+        shortName: 'Lat Phrao MRF',
+        name: 'Lat Phrao – Bang Sue Drainage Tunnel & MRF',
+        coords: '13.8055° N, 100.5562° E',
+        district: 'Chatuchak / Bang Sue • Doppler flow & YOLOv8 optical sorting gate',
+        x: 374,
+        y: 132
+      },
+      {
+        id: 'chao_phraya_sluice',
+        shortName: 'River Sluice S',
+        name: 'Chao Phraya Tidal Sluice Gate South',
+        coords: '13.6682° N, 100.5340° E',
+        district: 'Yan Nawa / Rat Burana • Estuarine tidal gauge & MPC pump override',
+        x: 358,
+        y: 410
+      },
+      {
+        id: 'bangkok_yai_west',
+        shortName: 'Bangkok Yai',
+        name: 'Khlong Bangkok Yai – Thonburi West Hub',
+        coords: '13.7398° N, 100.4865° E',
+        district: 'Bangkok Yai / Thonburi • West-bank canal telemetry & trash rake',
+        x: 135,
+        y: 316
+      },
+      {
+        id: 'nong_bon_retention',
+        shortName: 'Nong Bon #04',
+        name: 'Nong Bon Biochar Retention Basin (#04/25)',
+        coords: '13.6895° N, 100.6630° E',
+        district: 'Prawet • Biochar-lined stormwater detention & bio-filtration park',
+        x: 645,
+        y: 402
+      },
+      {
+        id: 'din_daeng_biogas',
+        shortName: 'Din Daeng Bio',
+        name: 'Din Daeng Anaerobic Biogas & Pyrolysis Plant',
+        coords: '13.7688° N, 100.5535° E',
+        district: 'Din Daeng • Converts sorted organics into Scope 2 pump electricity',
+        x: 368,
+        y: 198
+      },
+      {
+        id: 'makkasan_retention',
+        shortName: 'Makkasan #11',
+        name: 'Rama IX – Makkasan Retention Corridor (#11/25)',
+        coords: '13.7538° N, 100.5621° E',
+        district: 'Ratchathewi / Huai Khwang • Central Khlong Saen Saep surge sponge',
+        x: 408,
+        y: 238
+      }
+    ];
+
+    const ARCH_SHEET_DATA = {
+      l1_water: {
+        badge: 'L1 Physical Node 01',
+        title: 'Ultrasonic & Radar Water-Level Sensors',
+        desc: 'Deployed across 6,400 km of drainage pipes and 1,682 canals across Bangkok. Continuously measures canal water depth (m) and % hydraulic capacity over LoRaWAN / NB-IoT.',
+        route: 'Feeds → Module A (LSTM Flood Engine) & Module B (Clog Detection)',
+        schema: `{
+  "node_type": "L1_ULTRASONIC_DEPTH_01",
+  "coverage": "6,400 km pipes | 1,682 canals",
+  "telemetry": { "depth_m": 1.52, "capacity_pct": 38.0, "protocol": "LoRaWAN_5G_MESH" }
+}`
+      },
+      l1_flow: {
+        badge: 'L1 Physical Node 02',
+        title: 'Acoustic Doppler Flow-Rate Sensors',
+        desc: 'Subsurface acoustic Doppler velocity sensors inside trunk drainage pipes (m³/s) that detect sudden flow drops caused by unseen plastic or grease blockages before surface flooding occurs.',
+        route: 'Feeds → Module B (Multivariate Isolation Forest)',
+        schema: `{
+  "node_type": "L1_DOPPLER_VELOCITY_02",
+  "unit": "m³/s",
+  "anomaly_trigger": "Velocity drop > 45% without tidal lock"
+}`
+      },
+      l1_rain: {
+        badge: 'L1 Physical Node 03',
+        title: 'Optical Rainfall Gauges (60 mm/hr Benchmark)',
+        desc: 'High-resolution optical disdrometers measuring real-time precipitation intensity (mm/hr) benchmarked directly against Bangkok’s 60 mm/hour baseline drainage capacity.',
+        route: 'Feeds → Module A (Spatio-Temporal LSTM Flood Engine)',
+        schema: `{
+  "node_type": "L1_OPTICAL_RAIN_03",
+  "bma_capacity_threshold_mm_hr": 60.0,
+  "historical_stress_ref": "Sept 2026 (>300 mm / 3 days)"
+}`
+      },
+      l1_tide: {
+        badge: 'L1 Physical Node 04',
+        title: 'Chao Phraya River Tidal Gauges (m MSL)',
+        desc: 'Estuarine tidal level sensors (m MSL) monitoring river backwater pressure that locks gravity-fed canal sluice gates along the Chao Phraya River.',
+        route: 'Feeds → Module A & Module D (MPC Sluice Override)',
+        schema: `{
+  "node_type": "L1_CHAO_PHRAYA_TIDE_04",
+  "unit": "m MSL",
+  "sluice_lock_threshold_m": 1.85
+}`
+      },
+      l1_cam: {
+        badge: 'L1 Physical Node 05',
+        title: 'Edge AI Grate & Sluice Cameras',
+        desc: 'Edge optical cameras mounted at critical intake screens and sluice gates (such as Phra Khanong’s 15 tonnes/day hub) capturing % rubbish obstruction and waste composition.',
+        route: 'Feeds → Module B (YOLOv8 Computer Vision Classifier)',
+        schema: `{
+  "node_type": "L1_EDGE_OPTICAL_CAM_05",
+  "phra_khanong_benchmark_t_day": 15.0,
+  "outputs": ["obstruction_pct", "organic_vs_plastic_mask"]
+}`
+      },
+      l1_grid: {
+        badge: 'L1 Physical Node 06',
+        title: 'Smart Microgrid Energy Meters (158 Stations)',
+        desc: 'Installed across all 158 BMA pumping stations to monitor real-time pump power draw (MW), turbine load, and Scope 2 biogas co-generation offset (%).',
+        route: 'Feeds → Module D (MPC & Dynamic Microgrid Load Optimizer)',
+        schema: `{
+  "node_type": "L1_SMART_MICROGRID_06",
+  "pumping_stations_monitored": 158,
+  "metrics": ["active_power_mw", "biogas_offset_pct"]
+}`
+      },
+      l1_fog: {
+        badge: 'L1 Bio-Sensor Node 07',
+        title: 'Real-Time FOG Biochemical Sensors (pH & Temp)',
+        desc: 'Inline biochemical sensors in street-vendor food corridors (Yaowarat, Khlong Saen Saep) monitoring wastewater pH (optimal 6.5–7.5) and Temperature (°C) to regulate lipase-producing bacteria.',
+        route: 'Feeds → Module C (Lipase Biochemical Feedback Controller)',
+        schema: `{
+  "node_type": "L1_FOG_BIOSENSOR_07",
+  "optimal_lipase_ph_range": [6.5, 7.5],
+  "biological_action": "Hydrolyzes FOG into glycerol & fatty acids"
+}`
+      },
+      l1_rfid: {
+        badge: 'L1 Circular Node 08',
+        title: 'RFID & Automated Waste-Sorting Nodes',
+        desc: 'Smart source-sorting bins and conveyor trackers logging daily captured waste (tonnes/day) and separating the organic fraction for anaerobic biogas digestion and pyrolysis biochar.',
+        route: 'Feeds → Module B & Module D (Circular Fuel Supply)',
+        schema: `{
+  "node_type": "L1_RFID_SORTING_08",
+  "bma_waterway_waste_t_yr": 70000,
+  "pump_clog_waste_t_yr": 6908
+}`
+      },
+      l2_modA: {
+        badge: 'Layer 2 AI Engine • Module A',
+        title: 'AI Flood Prediction Engine (LSTM + GBDT)',
+        desc: 'Consumes rainfall radar, tide gauges, and canal levels to forecast urban flood risk and waterlogging depth 3 to 6 hours ahead, broadcasting early warnings to all 50 BMA districts and pre-draining 25 biochar retention areas.',
+        route: 'Automates → 50-District Early Alerts & 25-Basin Pre-Drainage',
+        schema: `{
+  "model": "Spatio-Temporal LSTM + Gradient Boosted Hydrological Model",
+  "horizon": "3 to 6 hours ahead",
+  "automated_action": "Broadcasts alerts to 50 districts & opens 25 retention gates"
+}`
+      },
+      l2_modB: {
+        badge: 'Layer 2 AI Engine • Module B',
+        title: 'AI Drainage Clog Detection & Automated Source Sorting',
+        desc: 'Fuses Multivariate Isolation Forest pipe velocity anomalies with YOLOv8 computer vision grate classification to flag blocked drains BEFORE rainfall arrives and actuate automated mechanical sorting gates.',
+        route: 'Automates → Pre-Storm Clog Alerts & Mechanical Sorting Gates',
+        schema: `{
+  "model": "Multivariate Isolation Forest + YOLOv8 CV Classifier",
+  "automated_action": "Diverts organics to biogas/biochar before drains clog"
+}`
+      },
+      l2_modC: {
+        badge: 'Layer 2 AI Engine • Module C',
+        title: 'AI Waste-Collection Crew VRP & Bio-Augmentation Control',
+        desc: 'Ranks drainage bottlenecks via Multi-Objective Vehicle Routing (cutting Scope 1 fleet diesel & Scope 3 landfill methane) while automatically dosing lipase-producing bacteria (L/hr) to digest street-vendor grease.',
+        route: 'Automates → Shortest-Route Crew Dispatch & Lipase Bio-Injectors',
+        schema: `{
+  "model": "Multi-Objective VRP + Biochemical Feedback Controller",
+  "automated_action": "Dispatches extraction crews & doses lipase microbes (L/hr)"
+}`
+      },
+      l2_modD: {
+        badge: 'Layer 2 AI Engine • Module D',
+        title: 'AI Smart Pump & Microgrid Energy Management (MPC)',
+        desc: 'Uses Model Predictive Control across all 158 BMA pumping stations to automate sluice gates, switch pumps to Scope 2 biogas electricity, and throttle pumps during dry season to save grid energy.',
+        route: 'Automates → Closed-Loop PLC Commands to 158 Pump Stations',
+        schema: `{
+  "model": "Model Predictive Control (MPC) & Dynamic Microgrid Optimizer",
+  "automated_action": "Sends closed-loop PLC commands to 158 stations & sluices"
+}`
+      }
+    };
+
+    // =========================================================================
+    // 3. DUAL-LAYER SIMULATION ENGINE (CLIENT EDGE + PRESETS)
+    // =========================================================================
+    function computeSimulation(inputs) {
+      const { rainfall, debris, ph, organics, tide } = inputs;
+      const clogFactor = debris / 100;
+      const tideFactor = Math.max(0, (tide - 0.8) / 1.8);
+
+      const isNormal = rainfall === 10 && debris === 18 && Math.abs(ph - 7.0) < 0.05 && organics === 14 && Math.abs(tide - 0.85) < 0.03;
+      const isBlockage = rainfall === 22 && debris === 85 && Math.abs(ph - 5.6) < 0.05 && organics === 15 && Math.abs(tide - 1.25) < 0.03;
+      const isFlood = rainfall === 80 && debris === 54 && Math.abs(ph - 6.4) < 0.05 && organics === 36 && Math.abs(tide - 2.15) < 0.03;
+
+      let flowRate, canalPct, fogTemp, floodRisk, waterloggingCm, alertDistricts, retentionDivert;
+      let anomalyScore, organicSplit, vrpTrucks, lipaseDosing, activePumps, powerMw, biogasShare, plcCmd;
+
+      if (isNormal) {
+        flowRate = 4.20;
+        canalPct = 38;
+        fogTemp = 29.2;
+        floodRisk = 11;
+        waterloggingCm = 0;
+        alertDistricts = 0;
+        retentionDivert = 12;
+        anomalyScore = 0.16;
+        organicSplit = 64;
+        vrpTrucks = 4;
+        lipaseDosing = 14.5;
+        activePumps = 24;
+        powerMw = 6.8;
+        biogasShare = 88;
+        plcCmd = 'Sluice 65% Open • Lipase Dosing 14.5 L/hr • 24/158 Pumps Eco';
+      } else if (isBlockage) {
+        flowRate = 1.10;
+        canalPct = 76;
+        fogTemp = 32.8;
+        floodRisk = 58;
+        waterloggingCm = 14;
+        alertDistricts = 14;
+        retentionDivert = 48;
+        anomalyScore = 0.89;
+        organicSplit = 58;
+        vrpTrucks = 18;
+        lipaseDosing = 68.0;
+        activePumps = 64;
+        powerMw = 18.4;
+        biogasShare = 76;
+        plcCmd = 'VRP Dispatch (18 Crews) • Lipase 68.0 L/hr • Phra Khanong Sort Max';
+      } else if (isFlood) {
+        flowRate = 2.45;
+        canalPct = 97;
+        fogTemp = 26.5;
+        floodRisk = 94;
+        waterloggingCm = 42;
+        alertDistricts = 50;
+        retentionDivert = 100;
+        anomalyScore = 0.74;
+        organicSplit = 51;
+        vrpTrucks = 28;
+        lipaseDosing = 32.0;
+        activePumps = 158;
+        powerMw = 47.4;
+        biogasShare = 62;
+        plcCmd = 'ALL 158 PUMPS ENGAGED • 25 Biochar Basins Open • 50 Districts Alerted';
+      } else {
+        flowRate = Math.max(0.45, +(4.75 * (1 - 0.78 * clogFactor) + (rainfall / 80) * 1.15 - tideFactor * 0.65).toFixed(2));
+        canalPct = Math.min(99, Math.round(24 + (rainfall / 60) * 44 + clogFactor * 36 + tideFactor * 18));
+        fogTemp = +(29.0 + Math.max(0, (7.0 - ph) * 2.5) - (rainfall / 100) * 2.5).toFixed(1);
+
+        floodRisk = Math.min(99, Math.max(6, Math.round((rainfall / 60) * 58 + (canalPct / 100) * 28 + tideFactor * 18)));
+        waterloggingCm = floodRisk < 35 ? 0 : Math.round((floodRisk - 32) * 0.65);
+        alertDistricts = Math.min(50, Math.round((floodRisk / 100) * 52));
+        retentionDivert = Math.min(100, Math.round(10 + floodRisk * 0.95));
+
+        anomalyScore = +(Math.min(0.99, 0.08 + clogFactor * 0.88 + Math.max(0, (3.5 - flowRate) * 0.05))).toFixed(2);
+        organicSplit = Math.round(Math.min(78, Math.max(45, 65 - (rainfall / 120) * 15)));
+
+        const phDev = Math.max(0, 7.0 - ph);
+        lipaseDosing = +(12.0 + phDev * 40.0 + (rainfall / 80) * 12.0).toFixed(1);
+        vrpTrucks = Math.min(32, Math.max(4, Math.round(3 + clogFactor * 18 + (rainfall / 80) * 12)));
+
+        activePumps = (rainfall >= 60 || canalPct >= 92)
+          ? 158
+          : Math.min(158, Math.max(20, Math.round(20 + (canalPct / 100) * 138)));
+        powerMw = +(activePumps * 0.30).toFixed(1);
+
+        const biogasMw = (organics / 14) * 6.0 + Math.max(0, (organics - 14) / 22) * 23.4;
+        biogasShare = Math.min(95, Math.max(48, Math.round((biogasMw / Math.max(1, powerMw)) * 100)));
+
+        plcCmd = `Pumps ${activePumps}/158 • Lipase ${lipaseDosing} L/hr • Retention ${retentionDivert}%`;
+      }
+
+      const canalDepthM = +((canalPct / 100) * 4.0).toFixed(2);
+      const biocharT = +(organics * 0.25).toFixed(1);
+      const carbonFixT = +(biocharT * 2.6).toFixed(1);
+      const circularRecoveryPct = Math.min(98, Math.max(62, Math.round(74 + (organics / 40) * 24 - clogFactor * 14)));
+
+      const scope1 = Math.round(1150 + vrpTrucks * 38);
+      const scope2 = Math.round(14500 + organics * 195 + biogasShare * 35);
+      const scope3 = Math.round(organics * 3057);
+
+      let severity = 'GREEN';
+      if (rainfall > 60 || canalPct >= 90) severity = 'RED';
+      else if (debris >= 45 || ph < 6.3 || floodRisk >= 45) severity = 'AMBER';
+
+      return {
+        severity,
+        flowRate,
+        canalPct,
+        canalDepthM,
+        fogTemp,
+        floodRisk,
+        waterloggingCm,
+        alertDistricts,
+        retentionDivert,
+        anomalyScore,
+        organicSplit,
+        plasticSplit: 100 - organicSplit,
+        vrpTrucks,
+        lipaseDosing,
+        activePumps,
+        powerMw,
+        biogasShare,
+        plcCmd,
+        biocharT,
+        carbonFixT,
+        circularRecoveryPct,
+        scope1,
+        scope2,
+        scope3,
+      };
+    }
+
+    // =========================================================================
+    // 4. UI RENDERING & APPLE iOS 26 INTERACTIVE UPDATES
+    // =========================================================================
+    function renderAll() {
+      const { rainfall, debris, ph, organics, tide } = state.inputs;
+      const sim = computeSimulation(state.inputs);
+
+      // Update Control Center Pill Sliders (Fill Widths & Labels)
+      document.getElementById('fillRain').style.width = `${(rainfall / 120) * 100}%`;
+      document.getElementById('fillRain').className = `cc-slider-fill ${rainfall > 60 ? 'bg-[#FF3B30]/30' : 'bg-[#007AFF]/25'}`;
+      document.getElementById('labelRain').textContent = `${Math.round(rainfall)} mm/hr`;
+
+      document.getElementById('fillDebris').style.width = `${debris}%`;
+      document.getElementById('fillDebris').className = `cc-slider-fill ${debris >= 50 ? 'bg-[#FF9500]/32' : 'bg-[#FF9500]/20'}`;
+      document.getElementById('labelDebris').textContent = `${Math.round(debris)}%`;
+
+      const phPct = ((ph - 4.5) / 4.0) * 100;
+      document.getElementById('fillPh').style.width = `${phPct}%`;
+      document.getElementById('labelPh').textContent = `${ph.toFixed(1)} pH`;
+
+      document.getElementById('fillOrganics').style.width = `${(organics / 40) * 100}%`;
+      document.getElementById('labelOrganics').textContent = `${Math.round(organics)} t/day`;
+
+      const tidePct = ((tide - 0.20) / 2.40) * 100;
+      document.getElementById('fillTide').style.width = `${tidePct}%`;
+      document.getElementById('labelTide').textContent = `+${tide.toFixed(2)} m`;
+
+      // Scenario Badge
+      const sevBadge = document.getElementById('scenarioSeverityBadge');
+      if (sim.severity === 'RED') {
+        sevBadge.textContent = 'RED • FLOOD CRITICAL';
+        sevBadge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FF3B30]/18 text-[#FF3B30]';
+      } else if (sim.severity === 'AMBER') {
+        sevBadge.textContent = 'AMBER • CLOG / FOG';
+        sevBadge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#FF9500]/18 text-[#FF9500]';
+      } else {
+        sevBadge.textContent = 'GREEN • NORMAL';
+        sevBadge.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#34C759]/15 text-[#28CD41]';
+      }
+
+      // Morph Dynamic Island Live Activity
+      updateDynamicIsland(sim);
+
+      // Update Apple Activity Rings
+      // Outer Ring: r=58 -> C = 364.4
+      const pumpRatio = sim.activePumps / 158;
+      document.getElementById('ringPumps').style.strokeDashoffset = (364.4 * (1 - pumpRatio)).toFixed(1);
+
+      // Middle Ring: r=44 -> C = 276.5
+      const biogasRatio = sim.biogasShare / 100;
+      document.getElementById('ringBiogas').style.strokeDashoffset = (276.5 * (1 - biogasRatio)).toFixed(1);
+
+      // Inner Ring: r=30 -> C = 188.5
+      const recRatio = sim.circularRecoveryPct / 100;
+      document.getElementById('ringRecovery').style.strokeDashoffset = (188.5 * (1 - recRatio)).toFixed(1);
+
+      document.getElementById('ringCenterPct').textContent = `${sim.biogasShare}%`;
+      document.getElementById('statActivePumps').textContent = `${sim.activePumps} / 158`;
+      document.getElementById('statBiogasShare').textContent = `${sim.biogasShare}% Share`;
+      document.getElementById('statRecoveryPct').textContent = `${sim.circularRecoveryPct}% Diverted`;
+
+      // ESG Inset Grouped Metrics
+      document.getElementById('esgPowerMw').textContent = `${sim.powerMw} MW`;
+      document.getElementById('esgBiochar').textContent = `${sim.biocharT} t/day (${sim.carbonFixT} tCO₂e/d)`;
+      document.getElementById('esgScope1').textContent = `-${sim.scope1.toLocaleString()} tCO₂e/yr`;
+      document.getElementById('esgScope2').textContent = `-${sim.scope2.toLocaleString()} tCO₂e/yr`;
+      document.getElementById('esgScope3').textContent = `-${sim.scope3.toLocaleString()} tCO₂e/yr`;
+
+      // Layer 2 AI Compact Cards
+      const modABadge = document.getElementById('cardModABadge');
+      modABadge.textContent = `${sim.floodRisk}% Risk`;
+      modABadge.className = `tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full ${
+        sim.floodRisk >= 70 ? 'bg-[#FF3B30]/18 text-[#FF3B30]' : sim.floodRisk >= 40 ? 'bg-[#FF9500]/18 text-[#FF9500]' : 'bg-[#34C759]/15 text-[#28CD41]'
+      }`;
+      document.getElementById('cardModASub').textContent = `3–6h: ${sim.waterloggingCm}cm • ${sim.alertDistricts}/50 Dist.`;
+
+      const modBBadge = document.getElementById('cardModBBadge');
+      modBBadge.textContent = `${sim.anomalyScore} Score`;
+      modBBadge.className = `tabular-mono text-[10px] font-bold px-2 py-0.5 rounded-full ${
+        sim.anomalyScore >= 0.75 ? 'bg-[#FF9500]/18 text-[#FF9500]' : 'bg-[#34C759]/15 text-[#28CD41]'
+      }`;
+      document.getElementById('cardModBSub').textContent = `${sim.organicSplit}% Org / ${sim.plasticSplit}% Plastic`;
+
+      document.getElementById('cardModCBadge').textContent = `${sim.lipaseDosing} L/hr`;
+      document.getElementById('cardModCSub').textContent = `${sim.vrpTrucks} Crews • FOG pH ${ph.toFixed(1)}`;
+
+      document.getElementById('cardModDBadge').textContent = `${sim.activePumps}/158`;
+      document.getElementById('cardModDSub').textContent = `${sim.biogasShare}% Scope 2 Biogas`;
+
+      // Dual-Layer SVG Pipeline Live Telemetry
+      document.getElementById('pipe_l1_water').textContent = `${sim.canalPct}% (${sim.canalDepthM}m)`;
+      document.getElementById('pipe_l1_flow').textContent = `${sim.flowRate.toFixed(2)} m³/s`;
+      document.getElementById('pipe_l1_rain').textContent = `${rainfall.toFixed(1)} mm/hr`;
+      document.getElementById('pipe_l1_tide').textContent = `+${tide.toFixed(2)} m MSL`;
+      document.getElementById('pipe_l1_cam').textContent = `${Math.round(debris)}% Debris`;
+      document.getElementById('pipe_l1_grid').textContent = `${sim.powerMw} MW (${sim.biogasShare}%)`;
+      document.getElementById('pipe_l1_fog').textContent = `pH ${ph.toFixed(1)} | ${sim.fogTemp}°C`;
+      document.getElementById('pipe_l1_rfid').textContent = `${organics.toFixed(1)} t/day`;
+
+      document.getElementById('pipe_l2_modA').textContent = `Risk: ${sim.floodRisk}% | 3–6h Forecast: ${sim.waterloggingCm}cm`;
+      document.getElementById('pipe_l2_modB').textContent = `Anomaly: ${sim.anomalyScore} | ${sim.organicSplit}% Org / ${sim.plasticSplit}% Plas`;
+      document.getElementById('pipe_l2_modC').textContent = `${sim.vrpTrucks} Crews | Lipase: ${sim.lipaseDosing} L/hr`;
+      document.getElementById('pipe_l2_modD').textContent = `${sim.activePumps}/158 Pumps | ${sim.biogasShare}% Biogas S2`;
+      document.getElementById('pipeFeedbackBanner').textContent = `CLOSED-LOOP PLC: ${sim.plcCmd}`;
+
+      // Radar Visual Intensity
+      const rg1 = document.getElementById('radarGrad1');
+      const rg2 = document.getElementById('radarGrad2');
+      if (rainfall > 60) {
+        rg1.setAttribute('stop-color', '#FF3B30');
+        rg1.setAttribute('stop-opacity', '0.46');
+        rg2.setAttribute('stop-color', '#FF9500');
+      } else if (rainfall >= 22) {
+        rg1.setAttribute('stop-color', '#FF9500');
+        rg1.setAttribute('stop-opacity', '0.36');
+        rg2.setAttribute('stop-color', '#007AFF');
+      } else {
+        rg1.setAttribute('stop-color', '#007AFF');
+        rg1.setAttribute('stop-opacity', '0.28');
+        rg2.setAttribute('stop-color', '#32ADE6');
+      }
+
+      // Render Apple Maps Pins & Place Card
+      renderAppleMapNodes(sim);
+    }
+
+    function updateDynamicIsland(sim) {
+      const pill = document.getElementById('dynamicIslandPill');
+      const dot = document.getElementById('diStatusDot');
+      const text1 = document.getElementById('diPrimaryText');
+      const badge2 = document.getElementById('diSecondaryBadge');
+
+      if (state.plcActive) {
+        pill.className = 'dynamic-island px-5 py-2 flex items-center gap-3 text-xs cursor-pointer ring-2 ring-[#AF52DE]/70';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-[#BF5AF2] animate-ping shrink-0';
+        text1.textContent = `PLC Remediation Active • Clearing Clogs & Balancing pH`;
+        badge2.textContent = `${Math.round(state.inputs.debris)}% Clog • pH ${state.inputs.ph.toFixed(1)}`;
+        badge2.className = 'tabular-mono text-[11px] font-bold text-[#BF5AF2] whitespace-nowrap';
+      } else if (sim.severity === 'RED') {
+        pill.className = 'dynamic-island px-5 py-2 flex items-center gap-3 text-xs cursor-pointer ring-2 ring-[#FF453A]/75';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-[#FF453A] animate-ping shrink-0';
+        text1.textContent = `Flood Alert: ${state.inputs.rainfall} mm/hr (>60 Limit) • 158/158 Pumps`;
+        badge2.textContent = `50 Districts • ${sim.biogasShare}% Biogas`;
+        badge2.className = 'tabular-mono text-[11px] font-bold text-[#FF453A] whitespace-nowrap';
+      } else if (sim.severity === 'AMBER') {
+        pill.className = 'dynamic-island px-5 py-2 flex items-center gap-3 text-xs cursor-pointer ring-2 ring-[#FF9F0A]/70';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-[#FF9F0A] animate-pulse shrink-0';
+        text1.textContent = `Pre-Storm Clog (${Math.round(state.inputs.debris)}%) • Lipase ${sim.lipaseDosing} L/hr`;
+        badge2.textContent = `${sim.vrpTrucks} VRP Crews Dispatched`;
+        badge2.className = 'tabular-mono text-[11px] font-bold text-[#FF9F0A] whitespace-nowrap';
+      } else {
+        pill.className = 'dynamic-island px-4 py-1.5 flex items-center gap-3 text-xs cursor-pointer';
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-[#30D158] shrink-0';
+        text1.textContent = `BMA Grid Optimal • ${sim.activePumps}/158 Pumps Eco`;
+        badge2.textContent = `${state.inputs.rainfall.toFixed(1)} mm/hr • ${sim.biogasShare}% Biogas`;
+        badge2.className = 'tabular-mono text-[11px] font-bold text-[#64D2FF] whitespace-nowrap';
+      }
+    }
+
+    function getHubTelemetry(hub, sim) {
+      const { rainfall, debris, ph, organics, tide } = state.inputs;
+      let status = 'GREEN';
+      let l1 = `${sim.canalPct}% Level • ${sim.flowRate} m³/s`;
+      let l2 = `LSTM Risk ${sim.floodRisk}% • YOLOv8 Sort`;
+      let plc = `${sim.activePumps}/158 Pumps • 65% Sluice`;
+
+      if (hub.id === 'phra_khanong') {
+        if (rainfall > 60 || sim.canalPct >= 90) status = 'RED';
+        else if (debris >= 45) status = 'AMBER';
+        l1 = `${Math.round(debris)}% Clog • 15.0 t/d Screen`;
+        l2 = status === 'AMBER' ? `Isolation Forest 0.89 • VRP (${sim.vrpTrucks})` : `YOLOv8 Gate (${sim.organicSplit}% Org)`;
+        plc = status === 'RED' ? '100% SURGE PUMP + SORT' : status === 'AMBER' ? 'PRE-STORM VRP + SORT GATE' : '15 t/d SORT • ECO PUMP';
+      } else if (hub.id === 'saen_saep_fog') {
+        if (rainfall > 65) status = 'RED';
+        else if (ph < 6.3) status = 'AMBER';
+        l1 = `FOG pH ${ph.toFixed(1)} • ${sim.fogTemp}°C`;
+        l2 = ph < 6.3 ? `Acidic FOG • Lipase ${sim.lipaseDosing} L/hr` : `Bio-Film Optimal (6.5–7.5)`;
+        plc = ph < 6.3 ? `INJECT LIPASE ${sim.lipaseDosing} L/hr` : 'MAINTENANCE DOSE 14.5 L/hr';
+      } else if (hub.id === 'chao_phraya_sluice') {
+        if (tide >= 1.95 || rainfall > 60) status = 'RED';
+        else if (tide >= 1.45) status = 'AMBER';
+        l1 = `River Tide +${tide.toFixed(2)} m MSL`;
+        l2 = tide >= 1.85 ? `Backwater Lock • MPC Override` : `Gravity + Pump Assist`;
+        plc = tide >= 1.85 ? 'GATE CLOSED • 158 PUMPS ON' : '65% SLUICE OPEN';
+      } else if (hub.id === 'lat_phrao_mrf' || hub.id === 'bangkok_yai_west') {
+        if (rainfall > 60) status = 'RED';
+        else if (debris >= 50) status = 'AMBER';
+        l1 = `${sim.flowRate} m³/s • ${Math.round(debris)}% Screen`;
+        l2 = `YOLOv8 CV: ${sim.organicSplit}% Organics`;
+        plc = debris >= 50 ? 'AUTO RAKE + VRP DISPATCH' : 'OPTICAL SORT ACTIVE';
+      } else if (hub.id === 'nong_bon_retention' || hub.id === 'makkasan_retention') {
+        if (rainfall > 68) status = 'RED';
+        else if (sim.retentionDivert >= 45) status = 'AMBER';
+        l1 = `Basin Fill ${Math.min(96, Math.round(18 + sim.retentionDivert * 0.74))}%`;
+        l2 = `Diverting ${sim.retentionDivert}% Peak Runoff`;
+        plc = sim.retentionDivert >= 45 ? 'RETENTION INTAKE OPEN' : 'BIOCHAR FILTRATION';
+      } else if (hub.id === 'din_daeng_biogas') {
+        status = 'GREEN';
+        l1 = `Feed ${organics} t/d • ${sim.biocharT} t/d Char`;
+        l2 = `Microgrid Supply: ${sim.biogasShare}% S2`;
+        plc = `BIOGAS TURBINE ${sim.biogasShare}% LOAD`;
+      }
+
+      return { status, l1, l2, plc };
+    }
+
+    function renderAppleMapNodes(sim) {
+      const group = document.getElementById('appleMapPinsGroup');
+      group.innerHTML = '';
+
+      BANGKOK_HUBS.forEach(hub => {
+        const info = getHubTelemetry(hub, sim);
+        const isSelected = hub.id === state.selectedHubId;
+        const pinColor = info.status === 'RED' ? '#FF3B30' : info.status === 'AMBER' ? '#FF9500' : '#34C759';
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${hub.x}, ${hub.y})`);
+        g.setAttribute('class', 'cursor-pointer');
+        g.onclick = () => {
+          state.selectedHubId = hub.id;
+          renderAll();
+        };
+
+        // Pulse Halo
+        const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pulse.setAttribute('r', isSelected ? '17' : '13');
+        pulse.setAttribute('fill', pinColor);
+        pulse.setAttribute('fill-opacity', '0.32');
+        pulse.setAttribute('class', 'map-pin-pulse');
+        g.appendChild(pulse);
+
+        // Selected Ring
+        if (isSelected) {
+          const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          ring.setAttribute('r', '15');
+          ring.setAttribute('fill', 'none');
+          ring.setAttribute('stroke', '#007AFF');
+          ring.setAttribute('stroke-width', '2.5');
+          g.appendChild(ring);
+        }
+
+        // Apple Maps White-Bordered Pin Circle
+        const pin = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pin.setAttribute('r', isSelected ? '9' : '7.5');
+        pin.setAttribute('fill', pinColor);
+        pin.setAttribute('stroke', '#FFFFFF');
+        pin.setAttribute('stroke-width', '2.5');
+        g.appendChild(pin);
+
+        // Floating Apple Maps Callout Pill
+        const labelOffsetX = hub.x > 560 ? -114 : 13;
+        const callout = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        callout.setAttribute('transform', `translate(${labelOffsetX}, -12)`);
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', '102');
+        rect.setAttribute('height', '24');
+        rect.setAttribute('rx', '12');
+        rect.setAttribute('fill', 'var(--glass-surface-solid)');
+        rect.setAttribute('fill-opacity', '0.94');
+        rect.setAttribute('stroke', isSelected ? '#007AFF' : 'var(--glass-hairline)');
+        rect.setAttribute('stroke-width', isSelected ? '1.6' : '1');
+        callout.appendChild(rect);
+
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', '51');
+        txt.setAttribute('y', '15.5');
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('fill', 'var(--text-primary)');
+        txt.setAttribute('font-size', '9');
+        txt.setAttribute('font-weight', '700');
+        txt.textContent = hub.shortName;
+        callout.appendChild(txt);
+
+        g.appendChild(callout);
+        group.appendChild(g);
+
+        // Sync Apple Maps Place Card if Selected
+        if (isSelected) {
+          const pill = document.getElementById('placeStatusPill');
+          pill.textContent = info.status === 'RED' ? 'CRITICAL FLOOD RISK' : info.status === 'AMBER' ? 'CLOG / FOG ACTIVE' : 'NORMAL FLOW';
+          pill.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+            info.status === 'RED'
+              ? 'bg-[#FF3B30]/18 text-[#FF3B30]'
+              : info.status === 'AMBER'
+                ? 'bg-[#FF9500]/18 text-[#FF9500]'
+                : 'bg-[#34C759]/15 text-[#28CD41]'
+          }`;
+
+          document.getElementById('placeCoords').textContent = hub.coords;
+          document.getElementById('placeTitle').textContent = hub.name;
+          document.getElementById('placeSubtitle').textContent = hub.district;
+          document.getElementById('placeL1Val').textContent = info.l1;
+          document.getElementById('placeL2Val').textContent = info.l2;
+          document.getElementById('placePlcVal').textContent = info.plc;
+        }
+      });
+    }
+
+    // =========================================================================
+    // 5. INTERACTIVE CONTROLS: SCENARIOS, SLIDERS, PLC LOOP, THEME, MODALS
+    // =========================================================================
+    function applyScenario(id) {
+      stopPlcRemediation();
+      state.activeScenario = id;
+      const meta = SCENARIO_META[id];
+      if (!meta) return;
+
+      state.inputs = { ...meta.values };
+
+      // Sync Range Inputs
+      document.getElementById('inputRain').value = state.inputs.rainfall;
+      document.getElementById('inputDebris').value = state.inputs.debris;
+      document.getElementById('inputPh').value = state.inputs.ph;
+      document.getElementById('inputOrganics').value = state.inputs.organics;
+      document.getElementById('inputTide').value = state.inputs.tide;
+
+      // Update Segmented Control Active States
+      ['normal', 'blockage', 'flood'].forEach(key => {
+        const btn = document.getElementById(`seg${key.charAt(0).toUpperCase() + key.slice(1)}`);
+        if (key === id) {
+          btn.className = 'ios-seg-btn active py-2 px-1.5 text-center';
+        } else {
+          btn.className = 'ios-seg-btn py-2 px-1.5 text-center text-ios-secondary';
+        }
+      });
+
+      document.getElementById('scenarioSummaryTitle').textContent = meta.title;
+      document.getElementById('scenarioSummaryDesc').textContent = meta.desc;
+
+      if (id === 'blockage') state.selectedHubId = 'phra_khanong';
+      else if (id === 'flood') state.selectedHubId = 'chao_phraya_sluice';
+      else state.selectedHubId = 'phra_khanong';
+
+      renderAll();
+      pingScenarioBackend(id);
+      showIosToast(`Scenario: ${meta.title}`);
+    }
+
+    function onPillSliderInput() {
+      state.activeScenario = 'custom';
+      ['segNormal', 'segBlockage', 'segFlood'].forEach(id => {
+        document.getElementById(id).className = 'ios-seg-btn py-2 px-1.5 text-center text-ios-secondary';
+      });
+
+      state.inputs.rainfall = parseFloat(document.getElementById('inputRain').value);
+      state.inputs.debris = parseFloat(document.getElementById('inputDebris').value);
+      state.inputs.ph = parseFloat(document.getElementById('inputPh').value);
+      state.inputs.organics = parseFloat(document.getElementById('inputOrganics').value);
+      state.inputs.tide = parseFloat(document.getElementById('inputTide').value);
+
+      document.getElementById('scenarioSummaryTitle').textContent = 'Custom Live Sensor Override';
+      document.getElementById('scenarioSummaryDesc').textContent =
+        `Live Control Center telemetry override (${state.inputs.rainfall} mm/hr rain, ${Math.round(state.inputs.debris)}% debris, pH ${state.inputs.ph.toFixed(1)}). Layer 2 AI models recalculating in real time.`;
+
+      renderAll();
+      postSimulateBackend();
+    }
+
+    function togglePlcRemediation() {
+      if (state.plcActive) {
+        stopPlcRemediation();
+        showIosToast('Closed-Loop PLC Remediation Paused');
+        return;
+      }
+
+      // If already in Normal state, load Blockage first so presenter sees live autonomous recovery
+      if (state.inputs.debris <= 22 && state.inputs.rainfall <= 15 && Math.abs(state.inputs.ph - 7.0) <= 0.2) {
+        applyScenario('blockage');
+      }
+
+      state.plcActive = true;
+      const btn = document.getElementById('plcRemediationBtn');
+      const icon = document.getElementById('plcBtnIcon');
+      const txt = document.getElementById('plcBtnText');
+      btn.className = 'w-full py-3 px-4 rounded-full font-bold text-xs text-white bg-gradient-to-r from-[#34C759] to-[#007AFF] shadow-md transition-all cursor-pointer flex items-center justify-center gap-2';
+      icon.className = 'w-2.5 h-2.5 rounded-full bg-white animate-ping';
+      txt.textContent = 'PLC Remediation Running (Tap to Stop)';
+
+      showIosToast('Closed-Loop PLC Actuators Engaged');
+
+      state.plcTimer = setInterval(() => {
+        let stepChanged = false;
+
+        if (state.inputs.debris > 18) {
+          state.inputs.debris = Math.max(18, +(state.inputs.debris - 4.5).toFixed(1));
+          stepChanged = true;
+        }
+        if (Math.abs(state.inputs.ph - 7.0) > 0.05) {
+          const diff = 7.0 - state.inputs.ph;
+          state.inputs.ph = +(state.inputs.ph + Math.sign(diff) * Math.min(Math.abs(diff), 0.12)).toFixed(1);
+          stepChanged = true;
+        }
+        if (state.inputs.rainfall > 12) {
+          state.inputs.rainfall = Math.max(12, +(state.inputs.rainfall - 4.5).toFixed(1));
+          stepChanged = true;
+        }
+        if (state.inputs.tide > 0.90) {
+          state.inputs.tide = Math.max(0.90, +(state.inputs.tide - 0.08).toFixed(2));
+          stepChanged = true;
+        }
+
+        document.getElementById('inputRain').value = state.inputs.rainfall;
+        document.getElementById('inputDebris').value = state.inputs.debris;
+        document.getElementById('inputPh').value = state.inputs.ph;
+        document.getElementById('inputOrganics').value = state.inputs.organics;
+        document.getElementById('inputTide').value = state.inputs.tide;
+
+        renderAll();
+
+        if (!stepChanged) {
+          stopPlcRemediation();
+          showIosToast('Network Restored to GREEN Optimal Flow!');
+        }
+      }, 520);
+    }
+
+    function stopPlcRemediation() {
+      state.plcActive = false;
+      if (state.plcTimer) {
+        clearInterval(state.plcTimer);
+        state.plcTimer = null;
+      }
+      const btn = document.getElementById('plcRemediationBtn');
+      const icon = document.getElementById('plcBtnIcon');
+      const txt = document.getElementById('plcBtnText');
+      btn.className = 'w-full py-3 px-4 rounded-full font-bold text-xs text-white bg-gradient-to-r from-[#007AFF] via-[#5856D6] to-[#AF52DE] hover:brightness-110 active:scale-[0.98] shadow-md transition-all cursor-pointer flex items-center justify-center gap-2';
+      icon.className = 'w-2 h-2 rounded-full bg-white';
+      txt.textContent = 'Run Closed-Loop PLC Remediation';
+      renderAll();
+    }
+
+    function onDynamicIslandTap() {
+      if (state.inputs.debris > 25 || state.inputs.rainfall > 25 || state.inputs.ph < 6.4) {
+        togglePlcRemediation();
+      } else {
+        openModal('benchmarksModal');
+      }
+    }
+
+    function toggleMapOverlay(type) {
+      state.overlays[type] = !state.overlays[type];
+      const on = state.overlays[type];
+
+      if (type === 'radar') {
+        document.getElementById('mapRadarOverlay').style.opacity = on ? '1' : '0';
+        const btn = document.getElementById('btnToggleRadar');
+        btn.className = on
+          ? 'px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-white/40 shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[#007AFF] text-white'
+          : 'px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-ios-hairline shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[var(--glass-surface-solid)] text-ios-secondary';
+      } else if (type === 'retention') {
+        document.getElementById('mapRetentionOverlay').style.opacity = on ? '1' : '0';
+        const btn = document.getElementById('btnToggleRetention');
+        btn.className = on
+          ? 'px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-white/40 shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[#AF52DE] text-white'
+          : 'px-3 py-1.5 rounded-full text-[11px] font-bold backdrop-blur-xl border border-ios-hairline shadow-md transition cursor-pointer flex items-center gap-1.5 bg-[var(--glass-surface-solid)] text-ios-secondary';
+      }
+    }
+
+    function setTheme(mode) {
+      state.theme = mode;
+      document.documentElement.setAttribute('data-theme', mode);
+
+      const dayBtn = document.getElementById('segDaylight');
+      const nightBtn = document.getElementById('segMidnight');
+      if (mode === 'daylight') {
+        dayBtn.className = 'ios-seg-btn active px-3 py-1 flex items-center gap-1';
+        nightBtn.className = 'ios-seg-btn px-3 py-1 text-ios-secondary flex items-center gap-1';
+        showIosToast('iOS 26 Daylight Liquid Glass Mode');
+      } else {
+        nightBtn.className = 'ios-seg-btn active px-3 py-1 flex items-center gap-1';
+        dayBtn.className = 'ios-seg-btn px-3 py-1 text-ios-secondary flex items-center gap-1';
+        showIosToast('iOS 26 Midnight OLED Glass Mode');
+      }
+    }
+
+    function openArchSheet(key) {
+      const item = ARCH_SHEET_DATA[key];
+      if (!item) return;
+      document.getElementById('sheetBadge').textContent = item.badge;
+      document.getElementById('sheetTitle').textContent = item.title;
+      document.getElementById('sheetDesc').textContent = item.desc;
+      document.getElementById('sheetSchema').textContent = item.schema;
+      document.getElementById('sheetRoute').textContent = item.route;
+      openModal('archSheetModal');
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+    }
+
+    // =========================================================================
+    // 6. FASTAPI BACKEND AUTO-DETECT, COPY & DOWNLOAD
+    // =========================================================================
+    async function checkFastAPIBackend(manual = false) {
+      const dot = document.getElementById('backendDot');
+      const txt = document.getElementById('backendText');
+      try {
+        const controller = new AbortController();
+        const t = setTimeout(() => controller.abort(), 1100);
+        const res = await fetch('http://localhost:8000/api/scenarios/normal', { signal: controller.signal });
+        clearTimeout(t);
+        if (res.ok) {
+          state.backendConnected = true;
+          dot.className = 'w-2 h-2 rounded-full bg-[#34C759] animate-ping';
+          txt.textContent = 'FastAPI :8000 Synced';
+          if (manual) showIosToast('Connected to Python FastAPI Server at :8000');
+          return;
+        }
+      } catch (e) {}
+
+      state.backendConnected = false;
+      dot.className = 'w-2 h-2 rounded-full bg-[#007AFF]';
+      txt.textContent = 'Edge Engine Active';
+      if (manual) showIosToast('Standalone Edge Engine Active (FastAPI :8000 offline)');
+    }
+
+    async function pingScenarioBackend(id) {
+      if (!state.backendConnected) return;
+      try { await fetch(`http://localhost:8000/api/scenarios/${id}`); } catch (e) {}
+    }
+
+    async function postSimulateBackend() {
+      if (!state.backendConnected) return;
+      try {
+        await fetch('http://localhost:8000/api/simulate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rainfall_mm_hr: state.inputs.rainfall,
+            grate_debris_pct: state.inputs.debris,
+            fog_ph: state.inputs.ph,
+            sorted_organics_t_day: state.inputs.organics,
+            tide_m_msl: state.inputs.tide
+          })
+        });
+      } catch (e) {}
+    }
+
+    function copyBackendCode() {
+      const ta = document.createElement('textarea');
+      ta.value = FASTAPI_BACKEND_CODE;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showIosToast('Copied app.py to clipboard');
+      } catch (e) {
+        showIosToast('Copy failed — please select code manually');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function downloadBackendCode() {
+      const blob = new Blob([FASTAPI_BACKEND_CODE], { type: 'text/x-python' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'app.py';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showIosToast('Downloaded app.py');
+    }
+
+    let toastTimer = null;
+    function showIosToast(msg) {
+      const el = document.getElementById('iosToast');
+      document.getElementById('iosToastText').textContent = msg;
+      el.classList.remove('opacity-0', 'translate-y-2');
+      el.classList.add('opacity-100', 'translate-y-0');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove('opacity-100', 'translate-y-0');
+        el.classList.add('opacity-0', 'translate-y-2');
+      }, 2800);
+    }
+
+    function updateLiveClock() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('liveClock').textContent = `${hh}:${mm}`;
+    }
+
+    // Initialize on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('fastapiCodePre').textContent = FASTAPI_BACKEND_CODE;
+      updateLiveClock();
+      setInterval(updateLiveClock, 15000);
+      renderAll();
+      checkFastAPIBackend(false);
+    });
+  </script>
+</body>
+</html>
